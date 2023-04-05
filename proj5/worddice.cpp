@@ -49,3 +49,27 @@ SINK,
 DICE, 
 WORD
 } Node_Type;
+
+int BFS(Graph g, Node* node)
+{
+    /* pseudocode
+    frontier = [] // queue
+    visited = {} // set
+    frontier.push(node)
+
+    while not frontier.empty()
+        v = frontier.pop()
+        if v in visited
+            continue
+        process(node)
+        marked.insert(node)
+        for u in g.edges[node]
+            frontier.push(u)
+    */
+}
+
+int main(int argc, char *argv[])
+{
+
+    return 0;
+}
