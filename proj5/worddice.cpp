@@ -32,7 +32,7 @@ class Graph
         // void addNode(Node_Type type);
         // void addEdge(Node *from, Node to, int capacity);
         int BFS();
-        int canISpell(); // determine whether a given word can be spelled using the dice faces
+        int canISpell(); // determine whether a given word can be spelled using the dice faces by calling BFS()
         // int maxFlow();
         vector <int> spelling_ids; // optional- used to print; vector to store the IDs of the nodes used in the spelling of a word 
     private:
