@@ -40,6 +40,7 @@ class Graph
         vector <Node*> nodes;
         int min_nodes;
 };
+
  // define an enumeration to represent the different types of nodes in the graph
 typedef enum
 {
