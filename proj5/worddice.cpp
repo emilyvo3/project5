@@ -9,8 +9,8 @@ class Node
         Node_Type type; // type of the node
         vector <bool> letter;
         int visited;
-        vector <Edge*> adj;
-        Edge *backedge; // pointer to the reverse edge (used in augumenting paths for max flow)
+        vector <class Edge*> adj;
+        class Edge *backedge; // pointer to the reverse edge (used in augumenting paths for max flow)
 };
 
 class Edge
