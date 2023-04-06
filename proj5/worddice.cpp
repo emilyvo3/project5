@@ -31,7 +31,7 @@ class Graph
         ~Graph(); // destructor
         // void addNode(Node_Type type);
         // void addEdge(Node *from, Node to, int capacity);
-        int BFS();
+        void BFS(Node* node);
         int canISpell(); // determine whether a given word can be spelled using the dice faces by calling BFS()
         // int maxFlow();
         vector <int> spelling_ids; // optional- used to print; vector to store the IDs of the nodes used in the spelling of a word 
@@ -50,7 +50,7 @@ DICE,
 WORD
 } Node_Type;
 
-int BFS(Graph g, Node* node)
+void BFS(Graph g, Node* node)
 {
     /* pseudocode
     frontier = [] // queue
@@ -66,6 +66,29 @@ int BFS(Graph g, Node* node)
         for u in g.edges[node]
             frontier.push(u)
     */
+    vector<Node*> frontier;
+    frontier.push_back(node);
+
+    while(!frontier.empty()) {
+        Node* v = frontier[0];
+        frontier.erase(frontier.begin());
+
+        if(v->visited > 0) {
+            continue;
+        }
+
+        // process node v
+        v->visited = 1;
+
+        // mark v as visited
+        //visited++;
+
+        // add the neighbors of v to the frontier
+        for(int i = 0; i < v->adj.size(); i++) {
+            Node* u = v->adj[i]->to;
+            frontier.push_back(u);
+        }
+    }
 }
 
 int main(int argc, char *argv[])
