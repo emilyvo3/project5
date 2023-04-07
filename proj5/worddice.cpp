@@ -1,8 +1,10 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <string>
 using namespace std;
 
-class Node
+/*class Node
 {
     public:
         Node(Node_Type t); // constructor
@@ -48,10 +50,10 @@ SOURCE,
 SINK, 
 DICE, 
 WORD
-} Node_Type;
+} Node_Type;*/
 
-void BFS(Graph g, Node* node)
-{
+//void BFS(Graph g, Node* node)
+//{
     /* pseudocode
     frontier = [] // queue
     visited = {} // set
@@ -66,7 +68,7 @@ void BFS(Graph g, Node* node)
         for u in g.edges[node]
             frontier.push(u)
     */
-    vector<Node*> frontier;
+    /*vector<Node*> frontier;
     frontier.push_back(node);
 
     while(!frontier.empty()) {
@@ -89,10 +91,48 @@ void BFS(Graph g, Node* node)
             frontier.push_back(u);
         }
     }
-}
+}*/
 
 int main(int argc, char *argv[])
 {
-
+    if (argc != 3) {
+        cerr << "Usage: " << argv[0] << " <Dice file> <Words file>\n";
+        return 1;
+    }
+    
+    ifstream dice_file(argv[1]);
+    ifstream words_file(argv[2]);
+    
+    // check if the files are open
+    if (!dice_file.is_open()) {
+        cerr << "Error: Failed to open " << argv[1] << endl;
+        return 1;
+    }
+    if (!words_file.is_open()) {
+        cerr << "Error: Failed to open " << argv[2] << endl;
+        return 1;
+    }
+    
+    // print the contents of the Dice file
+    //cout << "Contents of " << argv[1] << ":" << std::endl;
+    string line;
+    while (getline(dice_file, line)) {
+        //cout << line << endl;
+    }
+    //cout << endl;
+    
+    // print the contents of the Words file
+    //cout << "Contents of " << argv[2] << ":" << endl;
+    while (getline(words_file, line)) {
+        //cout << line << endl;
+    }
+    //cout << endl;
+    
+    // close the files
+    dice_file.close();
+    words_file.close();
+    
     return 0;
 }
+
+
