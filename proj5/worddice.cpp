@@ -4,7 +4,16 @@
 #include <string>
 using namespace std;
 
-/*class Node
+ // define an enumeration to represent the different types of nodes in the graph
+typedef enum
+{
+SOURCE, 
+SINK, 
+DICE, 
+WORD
+} Node_Type;
+
+class Node
 {
     public:
         Node(Node_Type t); // constructor
@@ -43,32 +52,39 @@ class Graph
         int min_nodes;
 };
 
- // define an enumeration to represent the different types of nodes in the graph
-typedef enum
+Node::Node(Node_Type t)
 {
-SOURCE, 
-SINK, 
-DICE, 
-WORD
-} Node_Type;*/
+    type = t;
+    visited = 0;
+    backedge = NULL;
+}
 
-//void BFS(Graph g, Node* node)
-//{
-    /* pseudocode
-    frontier = [] // queue
-    visited = {} // set
-    frontier.push(node)
+Edge::Edge(Node *from, Node *to, int original)
+{
 
-    while not frontier.empty()
-        v = frontier.pop()
-        if v in visited
-            continue
-        process(node)
-        marked.insert(node)
-        for u in g.edges[node]
-            frontier.push(u)
-    */
-    /*vector<Node*> frontier;
+}
+
+Graph::Graph(int min_nodes)
+{
+
+}
+
+Graph::~Graph()
+{
+    /* deallocate nodes and edges */
+    for (int i = 0; i < nodes.size(); i++)
+    {
+        for (int j = 0; j < nodes[i]->adj.size(); j++)
+        {
+            delete nodes[i]->adj[j];
+        }
+        delete nodes[i];
+    }
+}
+
+void Graph::BFS(Node* node)
+{
+    vector<Node*> frontier;
     frontier.push_back(node);
 
     while(!frontier.empty()) {
@@ -82,16 +98,23 @@ WORD
         // process node v
         v->visited = 1;
 
-        // mark v as visited
-        //visited++;
-
         // add the neighbors of v to the frontier
         for(int i = 0; i < v->adj.size(); i++) {
             Node* u = v->adj[i]->to;
             frontier.push_back(u);
         }
     }
-}*/
+}
+
+int Graph::canISpell()
+{
+
+}
+
+void Graph::deleteHalfGraph()
+{
+    
+}
 
 int main(int argc, char *argv[])
 {
