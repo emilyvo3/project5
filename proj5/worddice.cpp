@@ -169,8 +169,8 @@ int main(int argc, char *argv[])
     Node* sink = new Node(SINK);
     vector <Node*> dice;
     vector <Node*> word;
-    string word;
-    while (getline(dice_file, word)) {
+    string input;
+    while (getline(dice_file, input)) {
         //cout << line << endl;
 
     }
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
     
     // print the contents of the Words file
     //cout << "Contents of " << argv[2] << ":" << endl;
-    while (getline(words_file, word)) {
+    while (getline(words_file, input)) {
         //cout << line << endl;
 
     }
