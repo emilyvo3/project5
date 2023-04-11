@@ -115,18 +115,27 @@ void Graph::BFS(Node* node)
     }
 }
 
-int Graph::canISpell()
+int Graph::canISpell(int original)
 {
-    /*  - call BFS() until you can't find the paths anymore
-        - once BFS() returns with a path found, follow the backedges 
-        from the sink to the source while changing the original/residual 
+     while() { // while the paths are available
+        BFS();
+        /* - once BFS() returns with a path found, follow the backedges 
+        from the sink to the source, while changing the original/residual 
         on both "normal" and "reverse" edges so that original = 0 and residual = 1
-        on normal and original = 1 and residual = 0 on the reverse
+        on normal, and original = 1 and residual = 0 on the reverse
         - that way in BFS you only follow paths where original = 1 and doing this, 
-        you will have choose a path you have already been on
-        - once BFS() can no longer find new paths, check all the word nodes to see 
-        if residual = 1 got TO the sink. if ALL do, you can spell the word
-     */
+        you will have choose a path you have already been on */
+     }
+
+    /* - once BFS() can no longer find new paths, check all the word nodes to see 
+    if residual = 1 got TO the sink. if ALL do, you can spell the word */
+    if() {
+
+    }
+    else {
+        
+    }
+    
 }
 
 void Graph::deleteHalfGraph()
