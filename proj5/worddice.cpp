@@ -4,15 +4,6 @@
 #include <string>
 using namespace std;
 
- // define an enumeration to represent the different types of nodes in the graph
-typedef enum
-{
-SOURCE, 
-SINK, 
-DICE, 
-WORD
-} Node_Type;
-
 class Node
 {
     public:
