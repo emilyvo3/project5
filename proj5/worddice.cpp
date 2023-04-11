@@ -17,10 +17,10 @@ class Node
 {
     public:
         Node(Node_Type t); // constructor
-        Node_Type type; // type of the node
-        vector <bool> letter;
+        Node_Type type; // type of the node (source, sink, word or dice)
+        vector <bool> letter; // length 26 with letters contained in word set to 1
         int visited;
-        vector <class Edge*> adj;
+        vector <class Edge*> adj; // adjacency list
         class Edge *backedge; // pointer to the reverse edge (used in augumenting paths for max flow)
 };
 
@@ -30,9 +30,10 @@ class Edge
         Edge(Node *from, Node *to, int original); // constructor
         class Node *to; // pointer to the node at the end of the edge
         class Node *from; // pointer to the node at the start of the edge
-        Edge *reverse; // pointer to the reverse edge (augumenting paths)
-        int original; // original capacity of the edge
-        int residual; // residual capacity of the edge (updated during max flow calculation)
+        Edge *reverse; // pointer to the reverse edge (augumenting paths); keep track of edge going other way
+        int original; // original capacity of the edge; original weight per edge
+        int residual; // residual capacity of the edge (updated during max flow calculation);
+                        // allows for updated weight during Edmonds-Karp
 };
 
 class Graph
@@ -131,11 +132,10 @@ int Graph::canISpell(int original)
     if residual = 1 got TO the sink. if ALL do, you can spell the word */
     if() {
 
-    }
-    else {
-        
+        return 1; // If a word node has residual capacity of 1, it can be spelled
     }
     
+    return 0; // If none of the word nodes can be spelled, the word cannot be spelled
 }
 
 void Graph::deleteHalfGraph()
