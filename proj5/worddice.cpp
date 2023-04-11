@@ -162,19 +162,25 @@ int main(int argc, char *argv[])
         cerr << "Error: Failed to open " << argv[2] << endl;
         return 1;
     }
-    
+
     // print the contents of the Dice file
     //cout << "Contents of " << argv[1] << ":" << std::endl;
-    string line;
-    while (getline(dice_file, line)) {
+    Node* source = new Node(SOURCE);
+    Node* sink = new Node(SINK);
+    vector <Node*> dice;
+    vector <Node*> word;
+    string word;
+    while (getline(dice_file, word)) {
         //cout << line << endl;
+
     }
     //cout << endl;
     
     // print the contents of the Words file
     //cout << "Contents of " << argv[2] << ":" << endl;
-    while (getline(words_file, line)) {
+    while (getline(words_file, word)) {
         //cout << line << endl;
+
     }
     //cout << endl;
     
