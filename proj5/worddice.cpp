@@ -11,11 +11,14 @@ enum Node_Type {
 class Node
 {
     public:
-        Node(Node_Type t); // constructor
+		string name;
+        Node(Node_Type t, string word); // constructor
         Node_Type type; // type of the node (source, sink, word or dice)
         vector <bool> letter; // length 26 with letters contained in word set to 1
         int visited;
+		int id;//node id
         vector <class Edge*> adj; // adjacency list
+		friend ostream& operator<<(ostream& os, const Node& node);
         class Edge *backedge; // pointer to the reverse edge (used in augumenting paths for max flow)
 };
 
@@ -39,7 +42,7 @@ class Graph
         // void addNode(Node_Type type);
         // void addEdge(Node *from, Node to, int capacity);
         void BFS(Node* node);
-        int canISpell(); // determine whether a given word can be spelled using the dice faces by calling BFS()
+        int canISpell(int n); // determine whether a given word can be spelled using the dice faces by calling BFS()
         // int maxFlow();
         vector <int> spelling_ids; // optional- used to print; vector to store the IDs of the nodes used in the spelling of a word 
     private:
@@ -49,9 +52,10 @@ class Graph
 };
 
 // ddefine constructor for Node class that set its type, visited flag, and backedge
-Node::Node(Node_Type t)
+Node::Node(Node_Type t, string word)
 {
     type = t;
+	name = word;
     visited = 0;
     backedge = NULL;
 }
@@ -113,22 +117,22 @@ void Graph::BFS(Node* node)
 
 int Graph::canISpell(int original)
 {
-     while() { // while the paths are available
-        BFS();
+//     while() { // while the paths are available
+//        BFS();
         /* - once BFS() returns with a path found, follow the backedges 
         from the sink to the source, while changing the original/residual 
         on both "normal" and "reverse" edges so that original = 0 and residual = 1
         on normal, and original = 1 and residual = 0 on the reverse
         - that way in BFS you only follow paths where original = 1 and doing this, 
         you will have choose a path you have already been on */
-     }
+  //   }
 
     /* - once BFS() can no longer find new paths, check all the word nodes to see 
     if residual = 1 got TO the sink. if ALL do, you can spell the word */
-    if() {
+    /*if() {
 
         return 1; // If a word node has residual capacity of 1, it can be spelled
-    }
+    }*/
     
     return 0; // If none of the word nodes can be spelled, the word cannot be spelled
 }
@@ -148,41 +152,45 @@ int main(int argc, char *argv[])
     }
 
     //dice_file.open();
-    ifstream dice_file(argv[1]);
-    ifstream words_file(argv[2]);
+/*    ifstream dice_file(argv[1]);
+    ifstream words_file(argv[2]);*/
+	string dice_file, words_file;
+	dice_file = argv[1];
+	words_file = argv[2];
     
 	fin.open(dice_file);
 
 
     // check if the files are open
-    if (!dice_file.is_open()) {
+    if (!fin.is_open()) {
         cerr << "Error: Failed to open " << argv[1] << endl;
         return 1;
     }
 
     // print the contents of the Dice file
     //cout << "Contents of " << argv[1] << ":" << std::endl;
-    Node* source = new Node(SOURCE);
+    Node* source = new Node(SOURCE, "Source");
 //    Node* sink = new Node(SINK);
     //vector <Node*> dice;
     //vector <Node*> word;
     string input;
-    while (getline(dice_file, input)) {
+    while (cin >> input) {
         //cout << line << endl;
+		Node* source = new Node(DICE, input);
 
     }
     //cout << endl;
 	fin.close();
   
-	fin.open(word_file);
-    if (!words_file.is_open()) {
+	fin.open(words_file);
+    if (!fin.is_open()) {
         cerr << "Error: Failed to open " << argv[2] << endl;
         return 1;
     }
 
     // print the contents of the Words file
     //cout << "Contents of " << argv[2] << ":" << endl;
-    while (getline(words_file, input)) {
+    while (cin >> input) {
         //cout << line << endl;
 
     }
