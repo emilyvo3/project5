@@ -4,6 +4,10 @@
 #include <string>
 using namespace std;
 
+enum Node_Type {
+    SOURCE, SINK, DICE, WORD
+};
+
 class Node
 {
     public:
@@ -140,7 +144,7 @@ int main(int argc, char *argv[])
         cerr << "Usage: " << argv[0] << " <Dice file> <Words file>\n";
         return 1;
     }
-    
+    dice_file.open();
     ifstream dice_file(argv[1]);
     ifstream words_file(argv[2]);
     
@@ -149,24 +153,26 @@ int main(int argc, char *argv[])
         cerr << "Error: Failed to open " << argv[1] << endl;
         return 1;
     }
-    if (!words_file.is_open()) {
-        cerr << "Error: Failed to open " << argv[2] << endl;
-        return 1;
-    }
 
     // print the contents of the Dice file
     //cout << "Contents of " << argv[1] << ":" << std::endl;
     Node* source = new Node(SOURCE);
     Node* sink = new Node(SINK);
-    vector <Node*> dice;
-    vector <Node*> word;
+    //vector <Node*> dice;
+    //vector <Node*> word;
     string input;
     while (getline(dice_file, input)) {
         //cout << line << endl;
 
     }
     //cout << endl;
+    dice_file.close();
     
+    if (!words_file.is_open()) {
+        cerr << "Error: Failed to open " << argv[2] << endl;
+        return 1;
+    }
+
     // print the contents of the Words file
     //cout << "Contents of " << argv[2] << ":" << endl;
     while (getline(words_file, input)) {
@@ -176,7 +182,6 @@ int main(int argc, char *argv[])
     //cout << endl;
     
     // close the files
-    dice_file.close();
     words_file.close();
     
     return 0;
