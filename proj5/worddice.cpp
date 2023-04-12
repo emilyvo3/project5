@@ -60,6 +60,14 @@ Node::Node(Node_Type t, string word)
     backedge = NULL;
 }
 
+
+//Temporary code: DELETE LATER
+ostream& operator<<(ostream& os, const Node& node) {
+    os << node.name;
+    return os;
+}
+
+
 // define constructor for Edge class that sets its from, to, original and residual capacity,
 // and reverse edge
 Edge::Edge(Node *from, Node *to, int original)
@@ -170,13 +178,15 @@ int main(int argc, char *argv[])
     // print the contents of the Dice file
     //cout << "Contents of " << argv[1] << ":" << std::endl;
     Node* source = new Node(SOURCE, "Source");
+	cout<<*source<<endl;
 //    Node* sink = new Node(SINK);
     //vector <Node*> dice;
     //vector <Node*> word;
     string input;
-    while (cin >> input) {
+    while (fin >> input) {
         //cout << line << endl;
 		Node* source = new Node(DICE, input);
+		cout<<*source<<endl;
 
     }
     //cout << endl;
@@ -190,15 +200,23 @@ int main(int argc, char *argv[])
 
     // print the contents of the Words file
     //cout << "Contents of " << argv[2] << ":" << endl;
-    while (cin >> input) {
-        //cout << line << endl;
+    
+	
+	while (fin >> input) {
+        
 
     }
     //cout << endl;
     
     // close the files
     fin.close();
-    
+
+	//Testing
+	//Node node(DICE, "A");
+	//std::cout << node << std::endl;
+
+
+
     return 0;
 }
 
