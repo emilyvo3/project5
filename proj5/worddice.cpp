@@ -2,6 +2,8 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <sstream>
+
 using namespace std;
 
 enum Node_Type {
@@ -203,7 +205,21 @@ int main(int argc, char *argv[])
     
 	
 	while (fin >> input) {
-        
+//		stringstream ss(input);
+		string charc;
+//		ss >> charc;
+		for(int i = 0; i < input.length(); i++){	
+			charc = input[i];
+			Node* source = new Node(WORD, charc);
+			cout<<*source<<endl;
+
+
+		}
+		Node* source = new Node(SINK, "Sink");
+		cout<<*source<<endl;
+
+
+
 
     }
     //cout << endl;
