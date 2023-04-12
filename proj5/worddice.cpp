@@ -139,15 +139,21 @@ void Graph::deleteHalfGraph()
 }
 
 int main(int argc, char *argv[])
-{
+{	
+	ifstream fin;
+
     if (argc != 3) {
         cerr << "Usage: " << argv[0] << " <Dice file> <Words file>\n";
         return 1;
     }
-    dice_file.open();
+
+    //dice_file.open();
     ifstream dice_file(argv[1]);
     ifstream words_file(argv[2]);
     
+	fin.open(dice_file);
+
+
     // check if the files are open
     if (!dice_file.is_open()) {
         cerr << "Error: Failed to open " << argv[1] << endl;
@@ -157,7 +163,7 @@ int main(int argc, char *argv[])
     // print the contents of the Dice file
     //cout << "Contents of " << argv[1] << ":" << std::endl;
     Node* source = new Node(SOURCE);
-    Node* sink = new Node(SINK);
+//    Node* sink = new Node(SINK);
     //vector <Node*> dice;
     //vector <Node*> word;
     string input;
@@ -166,8 +172,9 @@ int main(int argc, char *argv[])
 
     }
     //cout << endl;
-    dice_file.close();
-    
+	fin.close();
+  
+	fin.open(word_file);
     if (!words_file.is_open()) {
         cerr << "Error: Failed to open " << argv[2] << endl;
         return 1;
@@ -182,7 +189,7 @@ int main(int argc, char *argv[])
     //cout << endl;
     
     // close the files
-    words_file.close();
+    fin.close();
     
     return 0;
 }
