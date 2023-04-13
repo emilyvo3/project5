@@ -93,9 +93,6 @@ Graph::Graph(string dice_file, string words_file)
         return 1;
     }
 
-    //dice_file.open();
-/*    ifstream dice_file(argv[1]);
-    ifstream words_file(argv[2]);*/
 	string dice_file, words_file;
 	dice_file = argv[1];
 	words_file = argv[2];
@@ -110,20 +107,18 @@ Graph::Graph(string dice_file, string words_file)
     }
 
     // print the contents of the Dice file
-    //cout << "Contents of " << argv[1] << ":" << std::endl;
     Node* source = new Node(SOURCE, "Source");
-//	cout<<*source<<endl;
-//    Node* sink = new Node(SINK);
-    //vector <Node*> dice;
-    //vector <Node*> word;
-    string input;
+	nodes.push_back(source);
+    
+	string input;
     while (fin >> input) {
-        //cout << line << endl;
 		Node* source = new Node(DICE, input);
-//		cout<<*source<<endl;
+		nodes.push_back(source);
+
 
     }
-    //cout << endl;
+
+
 	fin.close();
   
 	fin.open(words_file);
@@ -133,31 +128,28 @@ Graph::Graph(string dice_file, string words_file)
     }
 
     // print the contents of the Words file
-    //cout << "Contents of " << argv[2] << ":" << endl;
     
 	
 	while (fin >> input) {
-//		stringstream ss(input);
 		string charc;
-//		ss >> charc;
 		for(int i = 0; i < input.length(); i++){	
 			charc = input[i];
 			Node* source = new Node(WORD, charc);
-//			cout<<*source<<endl;
+			nodes.push_back(source);
+
 
 
 		}
 		Node* source = new Node(SINK, "Sink");
-//		cout<<*source<<endl;
-
-
+		nodes.push_back(source);
 
 
     }
-    //cout << endl;
     
     // close the files
     fin.close();
+
+
 }
 
 Graph::~Graph()
