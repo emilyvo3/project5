@@ -72,39 +72,46 @@ Node::Node(Node_Type t, string word)
 
 // define constructor for Edge class that sets its from, to, original and residual capacity,
 // and reverse edge
-Edge::Edge(Node *from, Node *to, int original)
+Edge::Edge(Node *from, Node *to)
 {
-    this->from = from; // set the "from" node
-    this->to = to; // set the "to" node
-    this->original = original; // set the original capacity
-    residual = original; // set the residual capacity to be equal to the original capacity
-    reverse = NULL; // set the reverse edge to null
+	Edge *e = new Edge;
+    e->from = from; // set the "from" node
+    e->to = to; // set the "to" node
+    e->residual = 0;
+	e->original = 1;; // set the residual capacity to be equal to the original capacity
+    e->reverse = NULL; // set the reverse edge to null
+
+	return e;
 }
 
 // define constructor for Graph class that sets its minimum number of nodes
 Graph::Graph(string dice_file, string words_file)
 {
-    this->min_nodes = min_nodes;
-    	Graph g = new Graph();
+    
+	vector<Nodes*> dice_nodes;
+	vector<NOdes*> words_nodes;
+	this->min_nodes = min_nodes;
+//    	Graph g = new Graph();
 	ifstream fin;
 
-    if (argc != 3) {
+  /*  if (argc != 3) {
         cerr << "Usage: " << argv[0] << " <Dice file> <Words file>\n";
         return 1;
     }
 
 	string dice_file, words_file;
 	dice_file = argv[1];
-	words_file = argv[2];
+	words_file = argv[2];*/
     
 	fin.open(dice_file);
 
 
     // check if the files are open
     if (!fin.is_open()) {
-        cerr << "Error: Failed to open " << argv[1] << endl;
-        return 1;
-    }
+        cerr << "Error: Failed to open " << dice_file << endl;
+//        return 1;
+		exit(-1);
+	}
 
     // print the contents of the Dice file
     Node* source = new Node(SOURCE, "Source");
@@ -113,6 +120,7 @@ Graph::Graph(string dice_file, string words_file)
 	string input;
     while (fin >> input) {
 		Node* source = new Node(DICE, input);
+		dice_nodes.push_back(source);
 		nodes.push_back(source);
 
 
@@ -123,8 +131,9 @@ Graph::Graph(string dice_file, string words_file)
   
 	fin.open(words_file);
     if (!fin.is_open()) {
-        cerr << "Error: Failed to open " << argv[2] << endl;
-        return 1;
+        cerr << "Error: Failed to open " << words_file << endl;
+//        return 1;
+		exit(-1);
     }
 
     // print the contents of the Words file
@@ -135,6 +144,7 @@ Graph::Graph(string dice_file, string words_file)
 		for(int i = 0; i < input.length(); i++){	
 			charc = input[i];
 			Node* source = new Node(WORD, charc);
+			words_nodes.push_back(source);
 			nodes.push_back(source);
 
 
@@ -148,6 +158,12 @@ Graph::Graph(string dice_file, string words_file)
     
     // close the files
     fin.close();
+
+	Edge *edge, *redge;
+
+	for(int i = 0; i < (int)dice_nodes.size(); i++){
+		edge = Edge(nodes[0], dice_nodes[i]);
+	}
 
 
 }
@@ -219,7 +235,7 @@ void Graph::deleteHalfGraph()
 
 int main(int argc, char *argv[])
 {	
-	Graph g = new Graph();
+//	Graph g = new Graph();
 	ifstream fin;
 
     if (argc != 3) {
@@ -234,7 +250,7 @@ int main(int argc, char *argv[])
 	dice_file = argv[1];
 	words_file = argv[2];
     
-    Graph g = new Graph(dice_file, words_file);
+    Graph* g = new Graph(dice_file, words_file);
     
 
 	//Testing
