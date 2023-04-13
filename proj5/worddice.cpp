@@ -20,7 +20,7 @@ class Node
         int visited;
 		int id;//node id
         vector <class Edge*> adj; // adjacency list
-		friend ostream& operator<<(ostream& os, const Node& node);
+//		friend ostream& operator<<(ostream& os, const Node& node);
         class Edge *backedge; // pointer to the reverse edge (used in augumenting paths for max flow)
 };
 
@@ -64,10 +64,10 @@ Node::Node(Node_Type t, string word)
 
 
 //Temporary code: DELETE LATER
-ostream& operator<<(ostream& os, const Node& node) {
+/*ostream& operator<<(ostream& os, const Node& node) {
     os << node.name;
     return os;
-}
+}*/
 
 
 // define constructor for Edge class that sets its from, to, original and residual capacity,
@@ -82,7 +82,7 @@ Edge::Edge(Node *from, Node *to, int original)
 }
 
 // define constructor for Graph class that sets its minimum number of nodes
-Graph::Graph(int min_nodes)
+Graph::Graph(/*int min_nodes*/)
 {
     this->min_nodes = min_nodes;
 }
@@ -154,6 +154,7 @@ void Graph::deleteHalfGraph()
 
 int main(int argc, char *argv[])
 {	
+	Graph g = new Graph();
 	ifstream fin;
 
     if (argc != 3) {
@@ -180,7 +181,7 @@ int main(int argc, char *argv[])
     // print the contents of the Dice file
     //cout << "Contents of " << argv[1] << ":" << std::endl;
     Node* source = new Node(SOURCE, "Source");
-	cout<<*source<<endl;
+//	cout<<*source<<endl;
 //    Node* sink = new Node(SINK);
     //vector <Node*> dice;
     //vector <Node*> word;
@@ -188,7 +189,7 @@ int main(int argc, char *argv[])
     while (fin >> input) {
         //cout << line << endl;
 		Node* source = new Node(DICE, input);
-		cout<<*source<<endl;
+//		cout<<*source<<endl;
 
     }
     //cout << endl;
@@ -211,12 +212,12 @@ int main(int argc, char *argv[])
 		for(int i = 0; i < input.length(); i++){	
 			charc = input[i];
 			Node* source = new Node(WORD, charc);
-			cout<<*source<<endl;
+//			cout<<*source<<endl;
 
 
 		}
 		Node* source = new Node(SINK, "Sink");
-		cout<<*source<<endl;
+//		cout<<*source<<endl;
 
 
 
