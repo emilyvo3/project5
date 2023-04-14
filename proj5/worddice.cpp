@@ -89,7 +89,7 @@ Graph::Graph(string dice_file, string words_file)
 {
     
 	vector<Nodes*> dice_nodes;
-	vector<NOdes*> words_nodes;
+	vector<Nodes*> words_nodes;
 	this->min_nodes = min_nodes;
 //    	Graph g = new Graph();
 	ifstream fin;
