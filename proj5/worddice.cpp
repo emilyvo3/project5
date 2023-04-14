@@ -237,7 +237,8 @@ Graph::Graph(string dice_file, string words_file, bool reverse_edge)
 			adj.push_back(redge);
 
         }
-
+		
+		//work on deletion before testing the edges
 
     }
     
@@ -310,7 +311,8 @@ int Graph::canISpell(int original)
 
 void Graph::deleteHalfGraph()
 {
-    
+    //delete the edges first that connect to the word nodes and sink
+	//delete the word nodes and sink node
 }
 
 int main(int argc, char *argv[])
