@@ -137,8 +137,8 @@ Graph::Graph(string dice_file, string words_file)
     
 	int id = 0;
 	int wordi;
-/*	vector<Nodes*> dice_nodes;
-	vector<Nodes*> words_nodes;*/
+	dice_nodes.clear();
+	words_nodes.clear();
 	ifstream fin;
 
   /*  if (argc != 3) {
@@ -183,6 +183,20 @@ Graph::Graph(string dice_file, string words_file)
   
 	min_nodes = id;
 
+	//making edges
+
+    //normal and reverse edges from source to dice nodes
+    for(int i = 0; i < (int)dice_nodes.size(); i++){
+		Edge *edge = Get_Edge(Nodes[0], dice_nodes[i], 0);
+        Edge *redge = Get_Edge(dice_nodes[i], Nodes[0], 1);
+        edge->reverse = redge;
+        redge->reverse = edge;
+
+        Nodes[0]->adj.push_back(edge);
+        dice_nodes[i]->adj.push_back(redge);
+
+    }
+
 
 	fin.open(words_file);
     if (!fin.is_open()) {
@@ -193,9 +207,10 @@ Graph::Graph(string dice_file, string words_file)
 
     // print the contents of the Words file
     
-	wordi = id;
-//	while (fin >> input) {
-		fin>>input;
+//	wordi = id;
+	while (fin >> input) {
+//		fin>>input;
+		wordi = id;
 		string charc;
 		for(int i = 0; i < input.length(); i++){	
 			charc = input[i];
@@ -213,7 +228,7 @@ Graph::Graph(string dice_file, string words_file)
 		//making edges
 
 		//normal and reverse edges from source to dice nodes
-	    for(int i = 0; i < (int)dice_nodes.size(); i++){
+/*	    for(int i = 0; i < (int)dice_nodes.size(); i++){
 		    Edge *edge = Get_Edge(Nodes[0], dice_nodes[i], 0);
 			Edge *redge = Get_Edge(dice_nodes[i], Nodes[0], 1);
 			edge->reverse = redge;
@@ -222,7 +237,7 @@ Graph::Graph(string dice_file, string words_file)
 			Nodes[0]->adj.push_back(edge);
 			dice_nodes[i]->adj.push_back(redge);
 
-	    }
+	    }*/
 
 
 		//making edges between Dice nodes and Word nodes
@@ -254,16 +269,25 @@ Graph::Graph(string dice_file, string words_file)
 
         }
 		
-		//work on deletion before testing the edges
+		for(int i = 0 ; i < (int)Nodes.size(); i++){
+			Nodes[i]->Print();
+//		    cout<<endl;
+	    }
+		cout<<endl;
 
-  //  }
+		//work on deletion before testing the edges
+		deleteHalfGraph();
+    }
     
     // close the files
     fin.close();
 	
-	for(int i = 0 ; i < (int)Nodes.size(); i++){
+/*	for(int i = 0 ; i < (int)Nodes.size(); i++){
 		Nodes[i]->Print();
+//		cout<<endl;
 	}
+	cout<<endl;*/
+
 
 
 }
@@ -334,6 +358,21 @@ void Graph::deleteHalfGraph()
 {
     //delete the edges first that connect to the word nodes and sink
 	//delete the word nodes and sink node
+	
+	for (int i = ((int)Nodes.size() - 1); i > (min_nodes - 1); i--)
+    {
+        for (int j = 0; j < (int)Nodes[i]->adj.size(); j++)
+        {
+            delete Nodes[i]->adj[j];
+			Nodes[i]->adj.pop_back();
+
+        }
+        delete Nodes[i];
+    	Nodes.pop_back();
+    }
+
+	words_nodes.clear();
+
 }
 
 int main(int argc, char *argv[])
