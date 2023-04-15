@@ -16,7 +16,7 @@ class Node
 		string name;
 //        Node(Node_Type t, string word); // constructor
         Node_Type type; // type of the node (source, sink, word or dice)
-        vector <bool> letter(26, false); // length 26 with letters contained in word set to 1
+        vector <bool> letter; // length 26 with letters contained in word set to 1
         int visited;
         vector <class Edge*> adj; // adjacency list
 //		friend ostream& operator<<(ostream& os, const Node& node);
@@ -40,10 +40,10 @@ class Edge
 class Graph
 {
     public:
-        Graph(string dice_file, string words_file, bool reverse_edge); // constructor
+        Graph(string dice_file, string words_file); // constructor
         ~Graph(); // destructor
-		Node *Get_Node(Node_Type t, string word); // constructor
-		Edge *Get_Edge(Node *from, Node *to, bool reverse_edge); // constructor
+		Node* Get_Node(Node_Type t, string word); // constructor
+		Edge* Get_Edge(Node *from, Node *to, bool reverse_edge); // constructor
 
         int BFS(Node* node);
         int canISpell(int n); // determine whether a given word can be spelled using the dice faces by calling BFS()
@@ -52,11 +52,14 @@ class Graph
         void deleteHalfGraph(); // used in finding augumenting paths for max flow
         vector <Node*> Nodes;
 		bool letterExist(Node* from, Node* to);
-vector <bool> letter(false, 26);        int min_nodes;
+		vector<Node*> dice_nodes;
+	    vector<Node*> words_nodes;
+
+		int min_nodes;
 };
 
 // ddefine constructor for Node class that set its type, visited flag, and backedge
-Node *Graph::Get_Node(Node_Type t, string word)
+Node* Graph::Get_Node(Node_Type t, string word)
 {
 	Node *n;
 
@@ -66,6 +69,7 @@ Node *Graph::Get_Node(Node_Type t, string word)
 	n->name = word;
 	Nodes.push_back(n);
     n->visited = 0;
+	n->letter = vector <bool> (26, false);
     n->backedge = NULL;
 	return n;    
 }
@@ -88,7 +92,7 @@ m& operator<<(ostream& os, const Node& node) {
 
 
 
-Edge *Graph::Get_Edge(Node *from, Node *to, bool reverse_edge)
+Edge* Graph::Get_Edge(Node *from, Node *to, bool reverse_edge)
 {
 	Edge *e = new Edge;
     e->from = from; // set the "from" node
@@ -108,7 +112,7 @@ Edge *Graph::Get_Edge(Node *from, Node *to, bool reverse_edge)
 }
 
 bool Graph::letterExist(Node* from, Node* to){
-	if(to->letter[((char)from->name) - 65] == 1){
+	if(to->letter[((char)from->name[0]) - 65] == 1){
 		return true;
 	}
 	else{
@@ -117,11 +121,11 @@ bool Graph::letterExist(Node* from, Node* to){
 }
 
 // define constructor for Graph class that sets its minimum number of nodes
-Graph::Graph(string dice_file, string words_file, bool reverse_edge)
+Graph::Graph(string dice_file, string words_file)
 {
     
-	vector<Nodes*> dice_nodes;
-	vector<Nodes*> words_nodes;
+/*	vector<Nodes*> dice_nodes;
+	vector<Nodes*> words_nodes;*/
 	ifstream fin;
 
   /*  if (argc != 3) {
@@ -137,15 +141,6 @@ Graph::Graph(string dice_file, string words_file, bool reverse_edge)
 
 
     // check if the files are open
-	if(reverse_edge){
-        e->residual = 0;
-        e->original = 1; // set the residual capacity to be equal to the original capacity
-    }
-    else{
-    //    e->reverse = NULL; // set the reverse edge to null
-        e->residual = 0;
-        e->original = 0;
-    }
     if (!fin.is_open()) {
         cerr << "Error: Failed to open " << dice_file << endl;
 //        return 1;
@@ -153,17 +148,17 @@ Graph::Graph(string dice_file, string words_file, bool reverse_edge)
 	}
 
     // print the contents of the Dice file
-    Node* source = new Get_Node(SOURCE, "Source");
+    Node *source = Get_Node(SOURCE, "Source");
 	Nodes.push_back(source);
     
 	string input;
     while (fin >> input) {
-		Node* source = new Get_Node(DICE, input);
+		Node *source = Get_Node(DICE, input);
 		dice_nodes.push_back(source);
 		Nodes.push_back(source);
 		
 		for(int i = 0; i < (int)input.length(); i++){
-			letter[input.at(i) - 65] = true;
+			source->letter[(int)input.at(i) - 65] = true;
 		}
 
     }
@@ -188,36 +183,38 @@ Graph::Graph(string dice_file, string words_file, bool reverse_edge)
 		string charc;
 		for(int i = 0; i < input.length(); i++){	
 			charc = input[i];
-			Node* source = new Get_Node(WORD, charc);
+			Node *source = Get_Node(WORD, charc);
 			words_nodes.push_back(source);
 			Nodes.push_back(source);
 
 
 
 		}
-		Node* source = new Get_Node(SINK, "Sink");
+		Node *source = Get_Node(SINK, "Sink");
 		Nodes.push_back(source);
 		
 		//making edges
 
 		//normal and reverse edges from source to dice nodes
 	    for(int i = 0; i < (int)dice_nodes.size(); i++){
-		    Edge* edge = new Get_Edge(Nodes[0], dice_nodes[i], 0);
-			Edge* redge = new Get_Edge(dice_nodes[i], Nodes[0], 1);
+		    Edge *edge = Get_Edge(Nodes[0], dice_nodes[i], 0);
+			Edge *redge = Get_Edge(dice_nodes[i], Nodes[0], 1);
 			edge->reverse = redge;
 			redge->reverse = edge;
 
-			adj.push_back(edge);
-			adj.push_back(redge);
+			Nodes[0]->adj.push_back(edge);
+			dice_nodes[i]->adj.push_back(redge);
 
 	    }
 
 
-		for(int i = 0; i < (int)words_nodes.size(); i++){
-			for(int j = 0; j < (int)dice_nodes.size(); j++){
+		//making edges between Dice nodes and Word nodes
+		//still incomplete: change the from and to while calling edges
+		for(int i = 0; i < (int)dice_nodes.size(); i++){
+			for(int j = 0; j < (int)words_nodes.size(); j++){
 				if(letterExist(words_nodes[i], dice_nodes[j])){
-					Edge* edge = new Get_Edge(Nodes[0], dice_nodes[i], 0);
-			        Edge* redge = new Get_Edge(dice_nodes[i], Nodes[0], 1);
+					Edge *edge = Get_Edge(dice_nodes[i], , 0);
+			        Edge *redge = Get_Edge(dice_nodes[i], Nodes[0], 1);
 			        edge->reverse = redge;
                     redge->reverse = edge;
 
@@ -229,12 +226,14 @@ Graph::Graph(string dice_file, string words_file, bool reverse_edge)
 
 		//normal and reverse edges from words nodes to sink
         for(int i = 0; i < (int)words_nodes.size(); i++){
-            Edge* edge = new Get_Edge(words_nodes[i], Nodes[(int)Nodes.size() - 1], 0);
-			Edge* redge = new Get_Edge(Nodes[(int)Nodes.size() - 1]], dice_nodes[i], 1);
+            Edge *edge = Get_Edge(words_nodes[i], Nodes[(int)Nodes.size() - 1], 0);
+			Edge *redge = Get_Edge(Nodes[(int)Nodes.size() - 1], dice_nodes[i], 1);
+			
+			edge->reverse = redge;
+            redge->reverse = edge;
 
-
-			adj.push_back(edge);
-			adj.push_back(redge);
+			words_nodes[i]->adj.push_back(edge);
+			Nodes[(int)Nodes.size() - 1]->adj.push_back(redge);
 
         }
 		
@@ -262,7 +261,7 @@ Graph::~Graph()
     }
 }
 
-void Graph::BFS(Node* node)
+int Graph::BFS(Node* node)
 {
     vector<Node*> frontier;
     frontier.push_back(node);
@@ -285,6 +284,8 @@ void Graph::BFS(Node* node)
             frontier.push_back(u);
         }
     }
+
+	return 1;
 }
 
 int Graph::canISpell(int original)
@@ -332,7 +333,7 @@ int main(int argc, char *argv[])
 	dice_file = argv[1];
 	words_file = argv[2];
     
-    Graph* g = new Graph(dice_file, words_file);
+    Graph *g = new Graph(dice_file, words_file);
     
 
 	//Testing
