@@ -210,8 +210,8 @@ Graph::Graph(string dice_file, string words_file)
 
 		//making edges between Dice nodes and Word nodes
 		//still incomplete: change the from and to while calling edges
-		for(int i = 0; i < (int)dice_nodes.size(); i++){
-			for(int j = 0; j < (int)words_nodes.size(); j++){
+		for(int i = 0; i < (int)words_nodes.size(); i++){
+			for(int j = 0; j < (int)dice_nodes.size(); j++){
 				if(letterExist(words_nodes[i], dice_nodes[j])){
 					Edge *edge = Get_Edge(dice_nodes[i], , 0);
 			        Edge *redge = Get_Edge(dice_nodes[i], Nodes[0], 1);
