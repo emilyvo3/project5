@@ -70,7 +70,7 @@ Node* Graph::Get_Node(Node_Type t, string word, int i)
     n->type = t;
 	n->name = word;
 //	Nodes.push_back(n);
-    n->visited = 0;
+    n->visited = -1;
 	n->id = i;
 	n->letter = vector <bool> (26, false);
     n->backedge = NULL;
@@ -108,7 +108,7 @@ Edge* Graph::Get_Edge(Node *from, Node *to, bool reverse_edge)
     e->from = from; // set the "from" node
     e->to = to; // set the "to" node
 
-	if(reverse_edge){
+	if(!reverse_edge){
 	    e->residual = 0;
 		e->original = 1; // set the residual capacity to be equal to the original capacity
 	}
@@ -241,7 +241,6 @@ Graph::Graph(string dice_file, string words_file)
 
 
 		//making edges between Dice nodes and Word nodes
-		//still incomplete: change the from and to while calling edges
 		for(int i = 0; i < (int)words_nodes.size(); i++){
 			for(int j = 0; j < (int)dice_nodes.size(); j++){
 				if(letterExist(words_nodes[i], dice_nodes[j])){
