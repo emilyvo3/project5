@@ -277,7 +277,7 @@ Graph::Graph(string dice_file, string words_file)
 		bfs = BFS();
 
 		//work on deletion before testing the edges
-		deleteHalfGraph();//do this in main
+		deleteHalfGraph();
 //    }
     
     // close the files
