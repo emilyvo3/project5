@@ -319,11 +319,11 @@ int Graph::BFS()
 	}
 
 		frontier.push_back(Nodes[0]);
-		cout<<"Adding in Frontier: "<<Nodes[0]->name<<endl;
+//		cout<<"Adding in Frontier: "<<Nodes[0]->name<<endl;
 
 		while(!frontier.empty()) {
 			Node* v = frontier[0];
-			 cout<<"Currently on: "<<v->name<<endl;
+//			 cout<<"Currently on: "<<v->name<<endl;
 
 			frontier.erase(frontier.begin());
 
@@ -340,7 +340,7 @@ int Graph::BFS()
 				Node* u = v->adj[i]->to;
 				if(v->adj[i]->original == 1){
 					frontier.push_back(u);
-					cout<<"Adding in Frontier: "<<u->name<<" ";
+//					cout<<"Adding in Frontier: "<<u->name<<" ";
 	
 					u->backedge = v->adj[i];
 					if(u->type == SINK){
@@ -348,14 +348,14 @@ int Graph::BFS()
 					}
 				}	
 	        }	
-			cout<<endl;
+//			cout<<endl;
 		}
 
 	
 /*    for(int i = 0; i < (int) adj.size(); i++){
         printf("%i ", adj[i]->to->id);
     }*/
-    cout<<endl;
+  //  cout<<endl;
 	
 	
 
@@ -364,7 +364,7 @@ int Graph::BFS()
 
 int Graph::canISpell(int original)
 {
-//     while() { // while the paths are available
+	while(BFS()) { // while the paths are available
 //        BFS();
         /* - once BFS() returns with a path found, follow the backedges 
         from the sink to the source, while changing the original/residual 
@@ -378,8 +378,8 @@ int Graph::canISpell(int original)
     if residual = 1 got TO the sink. if ALL do, you can spell the word */
     /*if() {
 
-        return 1; // If a word node has residual capacity of 1, it can be spelled
-    }*/
+        return 1; // If a word node has residual capacity of 1, it can be spelled*/
+    }
     
     return 0; // If none of the word nodes can be spelled, the word cannot be spelled
 }
