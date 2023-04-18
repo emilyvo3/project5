@@ -273,16 +273,28 @@ Graph::Graph(string dice_file, string words_file)
 //		    cout<<endl;
 	    }
 		cout<<endl;*/
-/*		bool bfs;
-		bfs = BFS();
+		//bool bfs;
+		//bfs = BFS();
 
 		//work on deletion before testing the edges
-		deleteHalfGraph();*///do this in main
+	/*	deleteHalfGraph();*///do this in main
 //    }
     
     // close the files
     fin.close();
-	
+
+/*	bool res = true;
+	do{
+		if(BFS()){
+			res = true;
+		}
+
+		else{
+			res = false;
+		}
+			
+		
+	}while(res);*/
 /*	for(int i = 0 ; i < (int)Nodes.size(); i++){
 		Nodes[i]->Print();
 //		cout<<endl;
@@ -319,37 +331,41 @@ int Graph::BFS()
 	}
 
 		frontier.push_back(Nodes[0]);
-		//cout<<"Adding in Frontier: "<<Nodes[0]->name<<endl;
-
+		cout<<"Adding in Frontier: "<<Nodes[0]->name<<endl;
+		Node* v;
 		while(!frontier.empty()) {
-			Node* v = frontier[0];
-//			 cout<<"Currently on: "<<v->name<<endl;
+			v = frontier[0];
+			v->visited = 1;
+			 cout<<"Currently on: "<<v->name<<endl;
 
 			frontier.erase(frontier.begin());
 
 	        // if node has already been visited, skip it
-		    if(v->visited > 0) {
+/*		    if(v->visited > 0) {
 			    continue;
-	        }
+	        }*/
 			//cout << "about to set as visited" << endl;
 		    // process node v
-			v->visited = 1;
-			//cout << "visited " << v->visited << endl;
+//			v->visited = 1;
+//			cout << "visited " << v->visited << endl;
 
 	        // add the neighbors of v to the frontier
 		    for(int i = 0; i < v->adj.size(); i++) {
 				Node* u = v->adj[i]->to;
-				if(v->adj[i]->original == 1){
+				if(v->adj[i]->original == 1 && u->visited == 0){
 					frontier.push_back(u);
-//					cout<<"Adding in Frontier: "<<u->name<<" ";
+					//visited = 1;
+					cout<<"Adding in Frontier: "<<u->name<<" ";
 	
 					u->backedge = v->adj[i];
+//					v = u;
 					if(u->type == SINK){
+						cout<<"Would return 1 here"<<endl;
 						return 1;
 					}
 				}	
 	        }	
-//			cout<<endl;
+			cout<<endl;
 		}
 
 	
@@ -359,7 +375,7 @@ int Graph::BFS()
   //  cout<<endl;
 	
 	
-
+	
 	return 0;
 }
 
@@ -378,22 +394,22 @@ int Graph::canISpell(int original)
 		cout<<"In the while loop"<<endl;
         Node *current = Nodes[SINK]; // start from sink
 		cout<<"set current node to sink"<<endl;
-        while (current != Nodes[SOURCE]) { // until the source has been reached
+        while (current->type != SOURCE) { // until the source has been reached
 			cout<<"Getting back edge now"<<endl;
 			
 			Edge *bedge = current->backedge; // get backedge
-            if(bedge != NULL){
+            //if(){
 				cout<<"Changing back edge values"<<endl;
 
 				bedge->original = 0;
 		        bedge->residual = 1;
 
-				cout<<"Setting current edge to "<<bedge->to->name<<endl;
-                current = bedge->to; // move to the next node in the path
+//				cout<<"Setting current edge to "<<bedge->to->name<<endl;
+  //              current = bedge->to; // move to the next node in the path
 
-			}	
+	//		}	
 			
-			else{
+	//	else{
 				cout<<"Getting original edge"<<endl;
             
 				Edge *edge = bedge->reverse; // get original edge
@@ -402,10 +418,10 @@ int Graph::canISpell(int original)
 				edge->original = 1;
 		        edge->residual = 0;
 			
-				cout<<"Setting current edge to "<<edge->to->name<<endl;
-			    current = edge->to; // move to the next node in the path
-			}	
-        }
+				cout<<"Setting current edge to "<<edge->from->name<<endl;
+			    current = edge->from; // move to the next node in the path
+				
+		}
     }
 
     /* once BFS() can no longer find new paths, check all the word nodes to see 
