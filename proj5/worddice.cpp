@@ -273,11 +273,11 @@ Graph::Graph(string dice_file, string words_file)
 //		    cout<<endl;
 	    }
 		cout<<endl;*/
-		bool bfs;
+/*		bool bfs;
 		bfs = BFS();
 
 		//work on deletion before testing the edges
-		deleteHalfGraph();//do this in main
+		deleteHalfGraph();*///do this in main
 //    }
     
     // close the files
@@ -373,15 +373,36 @@ int Graph::canISpell(int original)
         - that way in BFS you only follow paths where original = 1 and doing this, 
         you will have choose a path you have already been on */
   //   }
+		cout<<"In the while loop"<<endl;
         Node *current = Nodes[SINK]; // start from sink
+		cout<<"set current node to sink"<<endl;
         while (current != Nodes[SOURCE]) { // until the source has been reached
-            Edge *backedge = current->backedge; // get backedge
-            backedge->original = 0;
-            backedge->residual = 1;
-            Edge *edge = backedge->reverse; // get original edge
-            edge->original = 1;
-            edge->residual = 0;
-            current = edge->to; // move to the next node in the path
+			cout<<"Getting back edge now"<<endl;
+			
+			Edge *bedge = current->backedge; // get backedge
+            if(bedge != NULL){
+				cout<<"Changing back edge values"<<endl;
+
+				bedge->original = 0;
+		        bedge->residual = 1;
+
+				cout<<"Setting current edge to "<<bedge->to->name<<endl;
+                current = bedge->to; // move to the next node in the path
+
+			}	
+			
+			else{
+				cout<<"Getting original edge"<<endl;
+            
+				Edge *edge = bedge->reverse; // get original edge
+				cout<<"CHanging original values"<<endl;
+
+				edge->original = 1;
+		        edge->residual = 0;
+			
+				cout<<"Setting current edge to "<<edge->to->name<<endl;
+			    current = edge->to; // move to the next node in the path
+			}	
         }
     }
 
@@ -449,11 +470,13 @@ int main(int argc, char *argv[])
 	words_file = argv[2];
     
     //Graph *g = new Graph(dice_file, words_file);
-    Graph g = Graph(dice_file, words_file);
+	cout<<"Before Graph constructor"<<endl;
+	Graph g = Graph(dice_file, words_file);
+	cout<<"after graph created but before calling canISpell()"<<endl;
     //int can_spell1 = g.canISpell(0);
     //int can_spell2 = g.canISpell(1);
     // testing
-    int result = g.canISpell(1);
+    int result = g.canISpell(0);
     cout << "result: " << result << endl;
         /* testing */
         /*if (can_spell1 == 1) { // residual capacity of 1
