@@ -46,7 +46,8 @@ class Graph
         ~Graph(); // destructor
 		Node* Get_Node(Node_Type t, string word, int i); // constructor
 		Edge* Get_Edge(Node *from, Node *to, bool reverse_edge); // constructor
-
+		Node* source;
+		Node* sink;
         int BFS();
         int canISpell(int n); // determine whether a given word can be spelled using the dice faces by calling BFS()
         // int maxFlow();
@@ -282,6 +283,8 @@ Graph::Graph(string dice_file, string words_file)
     
     // close the files
     fin.close();
+	source = Nodes[0];
+	sink = Nodes[(int)Nodes.size() - 1];
 
 /*	bool res = true;
 	do{
@@ -392,7 +395,7 @@ int Graph::canISpell(int original)
         you will have choose a path you have already been on */
   //   }
 		cout<<"In the while loop"<<endl;
-        Node *current = Nodes[SINK]; // start from sink
+        Node *current = sink; // start from sink
 		cout<<"set current node to sink"<<endl;
         while (current->type != SOURCE) { // until the source has been reached
 			cout<<"Getting back edge now"<<endl;
@@ -418,8 +421,8 @@ int Graph::canISpell(int original)
 				edge->original = 1;
 		        edge->residual = 0;
 			
-				cout<<"Setting current edge to "<<edge->from->name<<endl;
-			    current = edge->from; // move to the next node in the path
+				cout<<"Setting current edge to "<<edge->to->name<<endl;
+			    current = edge->to; // move to the next node in the path
 				
 		}
     }
@@ -495,7 +498,7 @@ int main(int argc, char *argv[])
     //int can_spell2 = g.canISpell(1);
     // testing
 
-    int result = g.canISpell(0);
+    int result = g.canISpell();
     cout << "result: " << result << endl;
         /* testing */
         /*if (can_spell1 == 1) { // residual capacity of 1
