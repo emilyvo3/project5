@@ -394,7 +394,7 @@ int Graph::canISpell(int original)
 			else{
 				cout<<"Getting original edge"<<endl;
             
-				Edge *edge = bedge->reverse; // get original edge
+				Edge *edge = current->reverse; // get original edge
 				cout<<"CHanging original values"<<endl;
 
 				edge->original = 1;
