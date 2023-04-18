@@ -17,7 +17,7 @@ class Node
 //        Node(Node_Type t, string word); // constructor
         Node_Type type; // type of the node (source, sink, word or dice)
         vector <bool> letter; // length 26 with letters contained in word set to 1
-        int visited;
+        int visited=0;
 		int id;
         vector <class Edge*> adj; // adjacency list
 		void Print();
@@ -310,16 +310,16 @@ int Graph::BFS()
 {
     vector<Node*> frontier;
 	for(int i = 0; i < (int)Nodes.size(); i++){
-		if(Nodes[i]->visited != 0){
+		//if(Nodes[i]->visited != 0){
 			Nodes[i]->visited = 0;
-		}
-		if(Nodes[i]->backedge != NULL){
+		//}
+		//if(Nodes[i]->backedge != NULL){
             Nodes[i]->backedge = NULL;
-        }
+        //}
 	}
 
 		frontier.push_back(Nodes[0]);
-//		cout<<"Adding in Frontier: "<<Nodes[0]->name<<endl;
+		//cout<<"Adding in Frontier: "<<Nodes[0]->name<<endl;
 
 		while(!frontier.empty()) {
 			Node* v = frontier[0];
@@ -331,9 +331,10 @@ int Graph::BFS()
 		    if(v->visited > 0) {
 			    continue;
 	        }
-
+			//cout << "about to set as visited" << endl;
 		    // process node v
 			v->visited = 1;
+			//cout << "visited " << v->visited << endl;
 
 	        // add the neighbors of v to the frontier
 		    for(int i = 0; i < v->adj.size(); i++) {
@@ -364,6 +365,7 @@ int Graph::BFS()
 
 int Graph::canISpell(int original)
 {
+
 	while(BFS()) { // while the paths are available
         /* 
         - once BFS() returns with a path found, follow the backedges 
@@ -394,7 +396,7 @@ int Graph::canISpell(int original)
 			else{
 				cout<<"Getting original edge"<<endl;
             
-				Edge *edge = current->reverse; // get original edge
+				Edge *edge = bedge->reverse; // get original edge
 				cout<<"CHanging original values"<<endl;
 
 				edge->original = 1;
@@ -470,12 +472,13 @@ int main(int argc, char *argv[])
 	words_file = argv[2];
     
     //Graph *g = new Graph(dice_file, words_file);
-	cout<<"Before Graph constructor"<<endl;
+	//cout<<"Before Graph constructor"<<endl;
 	Graph g = Graph(dice_file, words_file);
-	cout<<"after graph created but before calling canISpell()"<<endl;
+	//cout<<"after graph created but before calling canISpell()"<<endl;
     //int can_spell1 = g.canISpell(0);
     //int can_spell2 = g.canISpell(1);
     // testing
+
     int result = g.canISpell(0);
     cout << "result: " << result << endl;
         /* testing */
