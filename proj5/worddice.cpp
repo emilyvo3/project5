@@ -365,23 +365,38 @@ int Graph::BFS()
 int Graph::canISpell(int original)
 {
 	while(BFS()) { // while the paths are available
-//        BFS();
-        /* - once BFS() returns with a path found, follow the backedges 
+        /* 
+        - once BFS() returns with a path found, follow the backedges 
         from the sink to the source, while changing the original/residual 
         on both "normal" and "reverse" edges so that original = 0 and residual = 1
         on normal, and original = 1 and residual = 0 on the reverse
         - that way in BFS you only follow paths where original = 1 and doing this, 
         you will have choose a path you have already been on */
   //   }
-
-    /* - once BFS() can no longer find new paths, check all the word nodes to see 
-    if residual = 1 got TO the sink. if ALL do, you can spell the word */
-    /*if() {
-
-        return 1; // If a word node has residual capacity of 1, it can be spelled*/
+        Node *current = Nodes[SINK]; // start from sink
+        while (current != Nodes[SOURCE]) { // until the source has been reached
+            Edge *backedge = current->backedge; // get backedge
+            backedge->original = 0;
+            backedge->residual = 1;
+            Edge *edge = backedge->reverse; // get original edge
+            edge->original = 1;
+            edge->residual = 0;
+            current = edge->to; // move to the next node in the path
+        }
     }
+
+    /* once BFS() can no longer find new paths, check all the word nodes to see 
+    if residual = 1 got TO the sink. if ALL do, you can spell the word */
+    for (int i = 0; i < (int)words_nodes.size(); i++)
+    {
+        //if (words_nodes[i]->visited != words_nodes[i]->visited)
+		if (words_nodes[i]->visited==0)
+        {
+            return 0;
+        }
+    }
+    return 1; //If a word node has residual capacity of 1, it can be spelled *
     
-    return 0; // If none of the word nodes can be spelled, the word cannot be spelled
 }
 
 void Graph::deleteHalfGraph()
@@ -433,16 +448,33 @@ int main(int argc, char *argv[])
 	dice_file = argv[1];
 	words_file = argv[2];
     
-    Graph *g = new Graph(dice_file, words_file);
-    
+    //Graph *g = new Graph(dice_file, words_file);
+    Graph g = Graph(dice_file, words_file);
+    //int can_spell1 = g.canISpell(0);
+    //int can_spell2 = g.canISpell(1);
+    // testing
+    int result = g.canISpell(1);
+    cout << "result: " << result << endl;
+        /* testing */
+        /*if (can_spell1 == 1) { // residual capacity of 1
+            //cout << "Test case 1 passed: able to spell word." << endl;
 
-	//Testing
-	//Node node(DICE, "A");
-	//std::cout << node << std::endl;
+        }
+        else {
+            cout << "Test case 1 failed: unable to spell word." << endl;
+        }
+        if (can_spell2 == 0) {
+            cout << "Test case 2 passed: unable to spell word." << endl;
+        }
+        else {
+            cout << "Test case 2 failed: able to spell word." << endl;
+        }*/
 
+        // Testing
+        // Node node(DICE, "A");
+        // std::cout << node << std::endl;
 
-
-    return 0;
+        return 0;
 }
 
 
