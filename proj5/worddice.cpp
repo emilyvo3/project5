@@ -336,7 +336,8 @@ int Graph::canISpell()
         //if (words_nodes[i]->visited != words_nodes[i]->visited)
 		if (sink->adj[i]->residual == 0)
         {
-            return 0;
+			cout<<"Reverse edge of sink is 0: "<<sink->adj[i]->residual<<endl;
+//			return 0;
         }
     }
     return 1; //If a word node has residual capacity of 1, it can be spelled *
