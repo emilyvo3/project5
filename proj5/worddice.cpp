@@ -59,6 +59,9 @@ class Graph
 	    vector<Node*> words_nodes;
 		int id, wordi;
 		int min_nodes;
+		int findDice(int wordid);
+		void Print(string input);
+
 };
 
 // ddefine constructor for Node class that set its type, visited flag, and backedge
@@ -78,12 +81,19 @@ Node* Graph::Get_Node(Node_Type t, string word, int i)
 	return n;    
 }
 
+void Graph::Print(string input){
+	for(int i = 0; i < (int) spelling_ids.size() - 1; i++){
+		cout<<spelling_ids[i]<<" ";
+	}
+	cout<<spelling_ids[(int) spelling_ids.size() - 1]<<": "<<input<<endl;
+}
+
 void Node::Print(){
-	printf("Node %i: %s Edges to ", id, name.c_str());
+/*	printf("Node %i: %s Edges to ", id, name.c_str());
 	for(int i = 0; i < (int) adj.size(); i++){
 		printf("%i ", adj[i]->to->id);
 	}
-	cout<<endl;
+	cout<<endl;*/
 /*	Graph g = Graph(input)
 	stringstream ss(input);
 	string token;
@@ -310,7 +320,7 @@ int Graph::canISpell()
         - that way in BFS you only follow paths where original = 1 and doing this, 
         you will have choose a path you have already been on */
   //   }
-		count++;
+//		count++;
 //		cout<<"In the while loop"<<endl;
         Node *current = sink; // start from sink
 //		cout<<"set current node to sink"<<endl;
@@ -345,12 +355,21 @@ int Graph::canISpell()
 				
 		}
     }
-
+	
+	
     /* once BFS() can no longer find new paths, check all the word nodes to see 
     if residual = 1 got TO the sink. if ALL do, you can spell the word */
-    for (int i = 0; i < (int)sink->adj.size(); i++)
+    for (int i = 0; i < (int)words_nodes.size(); i++)
     {
-        //if (words_nodes[i]->visited != words_nodes[i]->visited)
+		for(int j = 0; j < (int)words_nodes[i]->adj.size(); j++){
+			if(words_nodes[i]->adj[j]->to->type == SINK){
+				if(words_nodes[i]->adj[j]->residual == 0){
+					return 0;
+				}
+			}
+		}
+
+/*        //if (words_nodes[i]->visited != words_nodes[i]->visited)
 		if (sink->adj[i]->residual == 0)
         {
 			//cout<<"Reverse edge of sink is 0: "<<sink->adj[i]->residual<<endl;
@@ -358,8 +377,23 @@ int Graph::canISpell()
         }
 		else {
 			continue;
-		}
+		}*/
     }
+
+	//we'll be here if the word can be spelt
+/*	for(int i = 0; i < (int)words_nodes.size(); i++){
+		for(int j = 0; j < (int)words_nodes[i]->adj.size(); j++){
+			if(words_nodes[i]->adj[j]->to->type == DICE){
+				if(words_nodes[i]->adj[j]->residual == 1){
+					int id = words_nodes[i]->adj[j]->to->id;
+					int diceid = findDice(id);
+					spelling_ids.push_back(diceid);
+				
+				}
+			}
+		}
+	}*/
+
     return 1; //If a word node has residual capacity of 1, it can be spelled */
 
 /*		if(count == (int)words_nodes.size()){
@@ -369,6 +403,14 @@ int Graph::canISpell()
 			return 0;
 		}
     */
+}
+
+int Graph::findDice(int wordid){
+	for(int i = 0; i < (int)dice_nodes.size(); i++){
+		if(dice_nodes[i]->id == wordid){
+			return i;
+		}
+	}
 }
 
 void Graph::deleteHalfGraph()
@@ -451,8 +493,9 @@ int main(int argc, char *argv[])
 	//	wordi = id;
 	//	while (fin >> input) {
 	string input;
-	while (fin >> input) { 
+//	while (fin >> input) { 
 //		cout<<"hi"<<endl;
+		cin>>input;
 		g.words_nodes.clear();
 		string charc;
 		g.wordi = g.min_nodes;
@@ -553,16 +596,19 @@ int main(int argc, char *argv[])
         /* testing */
 		    if (can_spell1 == 1) { // residual capacity of 1
 	            cout << "Can spell " << input << endl;
-	
+
+	//			g.Print(input);
+
 		    }
 			else {
 				cout << "Cannot spell " << input << endl;
 			}
 		g.deleteHalfGraph();
+//		g.Print(input);
 		// Testing
         // Node node(DICE, "A");
         // std::cout << node << std::endl;
-	}
+//	}
 	fin.close();
     return 0;
 }
