@@ -20,7 +20,7 @@ class Node
         int visited=0;
 		int id;
         vector <class Edge*> adj; // adjacency list
-		void Print();
+		void Print(string input);
 //		friend ostream& operator<<(ostream& os, const Node& node);
         class Edge *backedge; // pointer to the reverse edge (used in augumenting paths for max flow)
 };
@@ -78,12 +78,22 @@ Node* Graph::Get_Node(Node_Type t, string word, int i)
 	return n;    
 }
 
-void Node::Print(){
-	printf("Node %i: %s Edges to ", id, name.c_str());
+void Node::Print(string input){
+	/*printf("Node %i: %s Edges to ", id, name.c_str());
 	for(int i = 0; i < (int) adj.size(); i++){
 		printf("%i ", adj[i]->to->id);
 	}
-	cout<<endl;
+	cout<<endl;*/ 
+	Graph g = Graph(input)
+	stringstream ss(input);
+	string token;
+	while (getline(ss, token, '.')) {
+		g.spelling_ids.push_back(stoi(token));
+	}
+	for (int i = 0; i < g.spelling_ids.size(); i++) { 
+		cout << g.spelling_ids[i] << ",";
+	}
+	cout << " " << name << endl;
 }
 
 //Temporary code: DELETE LATER
@@ -336,8 +346,8 @@ int Graph::canISpell()
         //if (words_nodes[i]->visited != words_nodes[i]->visited)
 		if (sink->adj[i]->residual == 0)
         {
-			cout<<"Reverse edge of sink is 0: "<<sink->adj[i]->residual<<endl;
-//			return 0;
+			//cout<<"Reverse edge of sink is 0: "<<sink->adj[i]->residual<<endl;
+			return 0;
         }
     }
     return 1; //If a word node has residual capacity of 1, it can be spelled *
@@ -424,7 +434,7 @@ int main(int argc, char *argv[])
 	//	wordi = id;
 	//	while (fin >> input) {
 	string input;
-	fin >> input;
+	while (fin >> input) { 
 
 	string charc;
 	for (int i = 0; i < (int)input.length(); i++)
@@ -483,8 +493,8 @@ int main(int argc, char *argv[])
 		g.Nodes[(int)g.Nodes.size() - 1]->adj.push_back(redge);
 	}
 
-	/*		for(int i = 0 ; i < (int)Nodes.size(); i++){
-				Nodes[i]->Print();
+			/*for(int i = 0 ; i < (int)g.Nodes.size(); i++){
+				g.Nodes[i]->Print();
 	//		    cout<<endl;
 			}
 			cout<<endl;*/
@@ -496,37 +506,38 @@ int main(int argc, char *argv[])
 	//    }
 
 	// close the files
+	
 	fin.close();
-	//cout<<"after graph created but before calling canISpell()"<<endl;
-    //int can_spell1 = g.canISpell(0);
-    //int can_spell2 = g.canISpell(1);
-    // testing
+		/*for(int i = 0 ; i < (int)Nodes.size(); i++){
+		g.Nodes[i]->Print();
+		cout<<endl;
+	}
+	cout<<endl;*/
+	// cout<<"after graph created but before calling canISpell()"<<endl;
+
+	// testing
 	
 	g.source = g.Nodes[0];
     g.sink = g.Nodes[(int)g.Nodes.size() - 1];
 
-
-    int result = g.canISpell();
-    cout << "result: " << result << endl;
+	int can_spell1 = g.canISpell();
+	//int can_spell2 = g.canISpell();
+	//int can_spell3 = g.canISpell();*/
+	//int result = g.canISpell();
+    //cout << "result: " << result << endl;
         /* testing */
-        /*if (can_spell1 == 1) { // residual capacity of 1
-            //cout << "Test case 1 passed: able to spell word." << endl;
+        if (can_spell1 == 1) { // residual capacity of 1
+            cout << "Can spell " << input << endl;
 
         }
         else {
-            cout << "Test case 1 failed: unable to spell word." << endl;
-        }
-        if (can_spell2 == 0) {
-            cout << "Test case 2 passed: unable to spell word." << endl;
-        }
-        else {
-            cout << "Test case 2 failed: able to spell word." << endl;
-        }*/
+			cout << "Cannot spell " << input << endl;
+		}
 
-        // Testing
+		// Testing
         // Node node(DICE, "A");
         // std::cout << node << std::endl;
-
+	}
         return 0;
 }
 
