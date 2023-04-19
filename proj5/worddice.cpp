@@ -20,7 +20,7 @@ class Node
         int visited=0;
 		int id;
         vector <class Edge*> adj; // adjacency list
-		void Print(string input);
+		void Print();
 //		friend ostream& operator<<(ostream& os, const Node& node);
         class Edge *backedge; // pointer to the reverse edge (used in augumenting paths for max flow)
 };
@@ -78,13 +78,13 @@ Node* Graph::Get_Node(Node_Type t, string word, int i)
 	return n;    
 }
 
-void Node::Print(string input){
-	/*printf("Node %i: %s Edges to ", id, name.c_str());
+void Node::Print(){
+	printf("Node %i: %s Edges to ", id, name.c_str());
 	for(int i = 0; i < (int) adj.size(); i++){
 		printf("%i ", adj[i]->to->id);
 	}
-	cout<<endl;*/ 
-	Graph g = Graph(input)
+	cout<<endl;
+/*	Graph g = Graph(input)
 	stringstream ss(input);
 	string token;
 	while (getline(ss, token, '.')) {
@@ -93,7 +93,7 @@ void Node::Print(string input){
 	for (int i = 0; i < g.spelling_ids.size(); i++) { 
 		cout << g.spelling_ids[i] << ",";
 	}
-	cout << " " << name << endl;
+	cout << " " << name << endl;*/
 }
 
 //Temporary code: DELETE LATER
@@ -185,12 +185,24 @@ Graph::Graph(string dice_file)
 		}
 
     }
+	
+	// normal and reverse edges from source to dice nodes
+    for (int i = 0; i < (int)dice_nodes.size(); i++)
+    {
+        Edge *edge = Get_Edge(Nodes[0], dice_nodes[i], 0);
+        Edge *redge = Get_Edge(dice_nodes[i], Nodes[0], 1);
+        edge->reverse = redge;
+        redge->reverse = edge;
+
+        Nodes[0]->adj.push_back(edge);
+        dice_nodes[i]->adj.push_back(redge);
+    }
 
 
 	fin.close();
   
 	min_nodes = id;
-	wordi = id;
+//	wordi = id;
 
 	//making edges
 
@@ -280,7 +292,7 @@ int Graph::BFS()
 					}
 				}	
 	        }	
-			cout<<endl;
+//			cout<<endl;
 		}
 
 	
@@ -296,7 +308,7 @@ int Graph::BFS()
 
 int Graph::canISpell()
 {
-
+	int count = 0;
 	while(BFS()) { // while the paths are available
         /* 
         - once BFS() returns with a path found, follow the backedges 
@@ -306,6 +318,7 @@ int Graph::canISpell()
         - that way in BFS you only follow paths where original = 1 and doing this, 
         you will have choose a path you have already been on */
   //   }
+		count++;
 //		cout<<"In the while loop"<<endl;
         Node *current = sink; // start from sink
 //		cout<<"set current node to sink"<<endl;
@@ -341,7 +354,7 @@ int Graph::canISpell()
 
     /* once BFS() can no longer find new paths, check all the word nodes to see 
     if residual = 1 got TO the sink. if ALL do, you can spell the word */
-    for (int i = 0; i < (int)sink->adj.size(); i++)
+/*    for (int i = 0; i < (int)sink->adj.size(); i++)
     {
         //if (words_nodes[i]->visited != words_nodes[i]->visited)
 		if (sink->adj[i]->residual == 0)
@@ -350,7 +363,14 @@ int Graph::canISpell()
 			return 0;
         }
     }
-    return 1; //If a word node has residual capacity of 1, it can be spelled *
+    return 1; //If a word node has residual capacity of 1, it can be spelled */
+
+		if(count == (int)words_nodes.size()){
+			return 1;
+		}
+		else{
+			return 0;
+		}
     
 }
 
@@ -364,7 +384,7 @@ void Graph::deleteHalfGraph()
 			for(int j = 0; j < (int)Nodes[i]->adj.size(); j++){
 				if(Nodes[i]->adj[j]->to->type == WORD){
 					delete Nodes[i]->adj[j];	
-					Nodes[i]->adj.pop_back();
+					Nodes[i]->adj.erase(Nodes[i]->adj.begin() + j);
 				}
 			}		
 		}
@@ -375,11 +395,11 @@ void Graph::deleteHalfGraph()
         for (int j = 0; j < (int)Nodes[i]->adj.size(); j++)
         {
             delete Nodes[i]->adj[j];
-			Nodes[i]->adj.pop_back();
+			Nodes[i]->adj.erase(Nodes[i]->adj.begin() + j);
 
         }
         delete Nodes[i];
-    	Nodes.pop_back();
+    	Nodes.erase(Nodes.begin() + i);
     }
 
 	words_nodes.clear();
@@ -417,7 +437,7 @@ int main(int argc, char *argv[])
 		exit(-1);
 	}
 
-	// normal and reverse edges from source to dice nodes
+	/*// normal and reverse edges from source to dice nodes
 	for (int i = 0; i < (int)g.dice_nodes.size(); i++)
 	{
 		Edge *edge = g.Get_Edge(g.Nodes[0], g.dice_nodes[i], 0);
@@ -427,7 +447,7 @@ int main(int argc, char *argv[])
 
 		g.Nodes[0]->adj.push_back(edge);
 		g.dice_nodes[i]->adj.push_back(redge);
-	}
+	}*/
 
 	// print the contents of the Words file
 
@@ -435,18 +455,19 @@ int main(int argc, char *argv[])
 	//	while (fin >> input) {
 	string input;
 	while (fin >> input) { 
-
-	string charc;
-	for (int i = 0; i < (int)input.length(); i++)
-	{
-		charc = input[i];
-		Node* source = g.Get_Node(WORD, charc, g.wordi);
-		g.wordi++;
-		g.words_nodes.push_back(source);
+//		cout<<"hi"<<endl;
+		string charc;
+		g.wordi = g.min_nodes;
+		for (int i = 0; i < (int)input.length(); i++)
+		{
+			charc = input[i];
+			Node* source = g.Get_Node(WORD, charc, g.wordi);
+			g.wordi++;
+			g.words_nodes.push_back(source);
+			g.Nodes.push_back(source);
+		}
+		Node* source = g.Get_Node(SINK, "Sink", g.wordi);
 		g.Nodes.push_back(source);
-	}
-	Node* source = g.Get_Node(SINK, "Sink", g.wordi);
-	g.Nodes.push_back(source);
 
 	// making edges
 
@@ -463,35 +484,35 @@ int main(int argc, char *argv[])
 			}*/
 
 	// making edges between Dice nodes and Word nodes
-	for (int i = 0; i < (int)g.words_nodes.size(); i++)
-	{
-		for (int j = 0; j < (int)g.dice_nodes.size(); j++)
+		for (int i = 0; i < (int)g.words_nodes.size(); i++)
 		{
-			if (g.letterExist(g.words_nodes[i], g.dice_nodes[j]))
+			for (int j = 0; j < (int)g.dice_nodes.size(); j++)
 			{
-				Edge *edge = g.Get_Edge(g.dice_nodes[j], g.words_nodes[i], 0);
-				Edge *redge = g.Get_Edge(g.words_nodes[i], g.dice_nodes[j], 1);
-				edge->reverse = redge;
-				redge->reverse = edge;
-
-				g.dice_nodes[j]->adj.push_back(edge);
-				g.words_nodes[i]->adj.push_back(redge);
+				if (g.letterExist(g.words_nodes[i], g.dice_nodes[j]))
+				{
+					Edge *edge = g.Get_Edge(g.dice_nodes[j], g.words_nodes[i], 0);
+					Edge *redge = g.Get_Edge(g.words_nodes[i], g.dice_nodes[j], 1);
+					edge->reverse = redge;
+					redge->reverse = edge;
+	
+					g.dice_nodes[j]->adj.push_back(edge);
+					g.words_nodes[i]->adj.push_back(redge);
+				}
 			}
-		}
-	}
-
+		}	
+	
 	// normal and reverse edges from words nodes to sink
-	for (int i = 0; i < (int)g.words_nodes.size(); i++)
-	{
-		Edge *edge = g.Get_Edge(g.words_nodes[i], g.Nodes[(int)g.Nodes.size() - 1], 0);
-		Edge *redge = g.Get_Edge(g.Nodes[(int)g.Nodes.size() - 1], g.words_nodes[i], 1);
+		for (int i = 0; i < (int)g.words_nodes.size(); i++)
+		{
+			Edge *edge = g.Get_Edge(g.words_nodes[i], g.Nodes[(int)g.Nodes.size() - 1], 0);
+			Edge *redge = g.Get_Edge(g.Nodes[(int)g.Nodes.size() - 1], g.words_nodes[i], 1);
 
-		edge->reverse = redge;
-		redge->reverse = edge;
+			edge->reverse = redge;
+			redge->reverse = edge;
 
-		g.words_nodes[i]->adj.push_back(edge);
-		g.Nodes[(int)g.Nodes.size() - 1]->adj.push_back(redge);
-	}
+			g.words_nodes[i]->adj.push_back(edge);
+			g.Nodes[(int)g.Nodes.size() - 1]->adj.push_back(redge);
+		}
 
 			/*for(int i = 0 ; i < (int)g.Nodes.size(); i++){
 				g.Nodes[i]->Print();
@@ -507,8 +528,8 @@ int main(int argc, char *argv[])
 
 	// close the files
 	
-	fin.close();
-		/*for(int i = 0 ; i < (int)Nodes.size(); i++){
+//		fin.close();
+/*		for(int i = 0 ; i < (int)g.Nodes.size(); i++){
 		g.Nodes[i]->Print();
 		cout<<endl;
 	}
@@ -517,28 +538,29 @@ int main(int argc, char *argv[])
 
 	// testing
 	
-	g.source = g.Nodes[0];
-    g.sink = g.Nodes[(int)g.Nodes.size() - 1];
+		g.source = g.Nodes[0];
+		g.sink = g.Nodes[(int)g.Nodes.size() - 1];
 
-	int can_spell1 = g.canISpell();
+		int can_spell1 = g.canISpell();
 	//int can_spell2 = g.canISpell();
 	//int can_spell3 = g.canISpell();*/
 	//int result = g.canISpell();
     //cout << "result: " << result << endl;
         /* testing */
-        if (can_spell1 == 1) { // residual capacity of 1
-            cout << "Can spell " << input << endl;
-
-        }
-        else {
-			cout << "Cannot spell " << input << endl;
-		}
-
+		    if (can_spell1 == 1) { // residual capacity of 1
+	            cout << "Can spell " << input << endl;
+	
+		    }
+			else {
+				cout << "Cannot spell " << input << endl;
+			}
+		g.deleteHalfGraph();
 		// Testing
         // Node node(DICE, "A");
         // std::cout << node << std::endl;
 	}
-        return 0;
+	fin.close();
+    return 0;
 }
 
 
