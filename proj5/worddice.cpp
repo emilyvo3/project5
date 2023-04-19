@@ -384,7 +384,7 @@ int Graph::canISpell()
 	for(int i = 0; i < (int)words_nodes.size(); i++){
 		for(int j = 0; j < (int)words_nodes[i]->adj.size(); j++){
 			if(words_nodes[i]->adj[j]->to->type == DICE){
-				if(words_nodes[i]->adj[j]->residual == 0){
+				if(words_nodes[i]->adj[j]->original == 1){
 					int id = words_nodes[i]->adj[j]->to->id;
 					int diceid = findDice(id);
 					spelling_ids.push_back(diceid);
