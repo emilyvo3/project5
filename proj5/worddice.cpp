@@ -263,7 +263,7 @@ int Graph::BFS()
 		while(!frontier.empty()) {
 			v = frontier[0];
 			v->visited = 1;
-//			 cout<<"Currently on: "<<v->name<<endl;
+	//		 cout<<"Currently on: "<<v->name<<endl;
 
 			frontier.erase(frontier.begin());
 
@@ -281,7 +281,7 @@ int Graph::BFS()
 				Node* u = v->adj[i]->to;
 				if(v->adj[i]->original == 1 && u->visited == 0){
 					frontier.push_back(u);
-					//visited = 1;
+//					u->visited = 1;
 //					cout<<"Adding in Frontier: "<<u->name<<" ";
 	
 					u->backedge = v->adj[i];
@@ -295,14 +295,6 @@ int Graph::BFS()
 //			cout<<endl;
 		}
 
-	
-/*    for(int i = 0; i < (int) adj.size(); i++){
-        printf("%i ", adj[i]->to->id);
-    }*/
-  //  cout<<endl;
-	
-	
-	
 	return 0;
 }
 
@@ -328,7 +320,7 @@ int Graph::canISpell()
 			Edge *bedge = current->backedge; // get backedge
             //if(){
 //				cout<<"Changing back edge values"<<endl;
-
+//				cout<<"Backedge of "<<current->name<<" is "<<current->backedge->to->name<<endl; 
 				bedge->original = 0;
 		        bedge->residual = 1;
 
@@ -342,6 +334,8 @@ int Graph::canISpell()
             
 				Edge *edge = bedge->reverse; // get original edge
 //				cout<<"CHanging original values"<<endl;
+//				cout<<"reverse edge of Backedge "<<current->backedge->to->name<<" is "<<bedge->reverse->to->name<<endl;
+
 
 				edge->original = 1;
 		        edge->residual = 0;
@@ -354,7 +348,7 @@ int Graph::canISpell()
 
     /* once BFS() can no longer find new paths, check all the word nodes to see 
     if residual = 1 got TO the sink. if ALL do, you can spell the word */
-/*    for (int i = 0; i < (int)sink->adj.size(); i++)
+    for (int i = 0; i < (int)sink->adj.size(); i++)
     {
         //if (words_nodes[i]->visited != words_nodes[i]->visited)
 		if (sink->adj[i]->residual == 0)
@@ -365,13 +359,13 @@ int Graph::canISpell()
     }
     return 1; //If a word node has residual capacity of 1, it can be spelled */
 
-		if(count == (int)words_nodes.size()){
+/*		if(count == (int)words_nodes.size()){
 			return 1;
 		}
 		else{
 			return 0;
 		}
-    
+    */
 }
 
 void Graph::deleteHalfGraph()
@@ -456,6 +450,7 @@ int main(int argc, char *argv[])
 	string input;
 	while (fin >> input) { 
 //		cout<<"hi"<<endl;
+		g.words_nodes.clear();
 		string charc;
 		g.wordi = g.min_nodes;
 		for (int i = 0; i < (int)input.length(); i++)
@@ -540,6 +535,12 @@ int main(int argc, char *argv[])
 	
 		g.source = g.Nodes[0];
 		g.sink = g.Nodes[(int)g.Nodes.size() - 1];
+		
+/*		for(int i = 0 ; i < (int)g.Nodes.size(); i++){
+	        g.Nodes[i]->Print();
+		    cout<<endl;
+	    }*/
+
 
 		int can_spell1 = g.canISpell();
 	//int can_spell2 = g.canISpell();
