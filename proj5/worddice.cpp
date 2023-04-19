@@ -89,11 +89,11 @@ void Graph::Print(string input){
 }
 
 void Node::Print(){
-/*	printf("Node %i: %s Edges to ", id, name.c_str());
+	printf("Node %i: %s Edges to ", id, name.c_str());
 	for(int i = 0; i < (int) adj.size(); i++){
 		printf("%i ", adj[i]->to->id);
 	}
-	cout<<endl;*/
+//	cout<<endl;
 /*	Graph g = Graph(input)
 	stringstream ss(input);
 	string token;
@@ -381,10 +381,10 @@ int Graph::canISpell()
     }
 
 	//we'll be here if the word can be spelt
-/*	for(int i = 0; i < (int)words_nodes.size(); i++){
+	for(int i = 0; i < (int)words_nodes.size(); i++){
 		for(int j = 0; j < (int)words_nodes[i]->adj.size(); j++){
 			if(words_nodes[i]->adj[j]->to->type == DICE){
-				if(words_nodes[i]->adj[j]->residual == 1){
+				if(words_nodes[i]->adj[j]->residual == 0){
 					int id = words_nodes[i]->adj[j]->to->id;
 					int diceid = findDice(id);
 					spelling_ids.push_back(diceid);
@@ -392,7 +392,7 @@ int Graph::canISpell()
 				}
 			}
 		}
-	}*/
+	}
 
     return 1; //If a word node has residual capacity of 1, it can be spelled */
 
@@ -420,10 +420,15 @@ void Graph::deleteHalfGraph()
 	
 	for(int i = 0; i < min_nodes; i++){
 		if(Nodes[i]->type == DICE){
-			for(int j = 0; j < (int)Nodes[i]->adj.size(); j++){
-				if(Nodes[i]->adj[j]->to->type == WORD){
+			for(int j = (int)Nodes[i]->adj.size() - 1; j > 0; j--){
+				if(Nodes[i]->adj[j]->to->type == WORD ){
+//					cout<<"Removing edge from "<<Nodes[i]->name<<" to "<<Nodes[i]->adj[j]->to->name<<endl;
+
 					delete Nodes[i]->adj[j];	
+//					Nodes[i]->adj.pop_back();
+//					cout<<"Removing edge from "<<Nodes[i]->name<<" to "<<Nodes[i]->adj[j]->to->name<<endl;
 					Nodes[i]->adj.erase(Nodes[i]->adj.begin() + j);
+//					j++;
 				}
 			}		
 		}
@@ -431,7 +436,7 @@ void Graph::deleteHalfGraph()
 	
 	for (int i = ((int)Nodes.size() - 1); i > (min_nodes - 1); i--)
     {
-        for (int j = 0; j < (int)Nodes[i]->adj.size(); j++)
+        for (int j = (int)Nodes[i]->adj.size() - 1; j > 0; j--)
         {
             delete Nodes[i]->adj[j];
 			Nodes[i]->adj.erase(Nodes[i]->adj.begin() + j);
@@ -464,10 +469,10 @@ int main(int argc, char *argv[])
     
     //Graph *g = new Graph(dice_file, words_file);
 	//cout<<"Before Graph constructor"<<endl;
-	Graph g = Graph(dice_file);
+//	Graph g = Graph(dice_file);
 
 	fin.open(words_file);
-	g.words_nodes.clear();
+//	g.words_nodes.clear();
 
 	if (!fin.is_open())
 	{
@@ -491,22 +496,32 @@ int main(int argc, char *argv[])
 	// print the contents of the Words file
 
 	//	wordi = id;
-	while (fin >> input) {
+//	while (fin >> input) {
 		//make an arrat of string that holds the words from Words1.txt and individually give the while loop the string
-	}
-	string input, in1, in2;
-	in1 = "RAGE";
-	in2 = "ERR";
+//	}
+	string input;// in1, in2;
+//	vector<string> input;
+//	in1 = "RAGE";
+//	in2 = "ERR";
+/*	while(fin >> winput){
+		input.push_back(winput);
+	}*/
 
 	while (fin >> input) { 
+//	for(int i = 0; i < (int)input.size(); i++){
 		//cout<<"hi"<<endl;
 //		cin>>input;
-		g.words_nodes.clear();
+//		g.words_nodes.clear();
+//		cout<<input<<endl;
+		Graph g = Graph(dice_file);
+	
 		string charc;
 		g.wordi = g.min_nodes;
+//		cout<<"wordi before starting to add word nodes: "<<g.wordi<<endl;
 		for (int i = 0; i < (int)input.length(); i++)
 		{
 			charc = input[i];
+//			cout<<"Each character "<<charc;
 			Node* source = g.Get_Node(WORD, charc, g.wordi);
 			g.wordi++;
 			g.words_nodes.push_back(source);
@@ -600,15 +615,23 @@ int main(int argc, char *argv[])
     //cout << "result: " << result << endl;
         /* testing */
 		    if (can_spell1 == 1) { // residual capacity of 1
-	            cout << "Can spell " << input << endl;
+//	            cout << "Can spell " << input << endl;
 
-	//			g.Print(input);
+				g.Print(input);
 
 		    }
 			else {
 				cout << "Cannot spell " << input << endl;
 			}
 		g.deleteHalfGraph();
+//		cout<<"After deleting half graph: "<<endl;
+//		cout<<"Size of words node: "<<(int)g.words_nodes.size()<<endl;
+//		cout<<"Size of Nodes vector: "<<(int) g.Nodes.size()<<endl;
+
+/*		for(int i = 0 ; i < (int)g.Nodes.size(); i++){
+            g.Nodes[i]->Print();
+            cout<<endl;
+        }*/
 //		g.Print(input);
 		// Testing
         // Node node(DICE, "A");

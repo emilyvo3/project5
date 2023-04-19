@@ -208,7 +208,7 @@ Graph::Graph(string dice_file, string words_file)
     // print the contents of the Words file
     
 //	wordi = id;
-//	while (fin >> input) {
+	while (fin >> input) {
 		fin>>input;
 		wordi = id;
 		string charc;
@@ -268,17 +268,17 @@ Graph::Graph(string dice_file, string words_file)
 
         }
 		
-/*		for(int i = 0 ; i < (int)Nodes.size(); i++){
+		for(int i = 0 ; i < (int)Nodes.size(); i++){
 			Nodes[i]->Print();
 //		    cout<<endl;
 	    }
-		cout<<endl;*/
+		cout<<endl;
 		bool bfs;
 		bfs = BFS();
 
 		//work on deletion before testing the edges
 		deleteHalfGraph();
-//    }
+    }
     
     // close the files
     fin.close();
@@ -286,8 +286,8 @@ Graph::Graph(string dice_file, string words_file)
 /*	for(int i = 0 ; i < (int)Nodes.size(); i++){
 		Nodes[i]->Print();
 //		cout<<endl;
-	}
-	cout<<endl;*/
+	}*/
+//	cout<<endl;
 
 
 
@@ -319,11 +319,11 @@ int Graph::BFS()
 	}
 
 		frontier.push_back(Nodes[0]);
-		cout<<"Adding in Frontier: "<<Nodes[0]->name<<endl;
+//		cout<<"Adding in Frontier: "<<Nodes[0]->name<<endl;
 
 		while(!frontier.empty()) {
 			Node* v = frontier[0];
-			 cout<<"Currently on: "<<v->name<<endl;
+//			 cout<<"Currently on: "<<v->name<<endl;
 
 			frontier.erase(frontier.begin());
 
@@ -340,7 +340,7 @@ int Graph::BFS()
 				Node* u = v->adj[i]->to;
 				if(v->adj[i]->original == 1){
 					frontier.push_back(u);
-					cout<<"Adding in Frontier: "<<u->name<<" ";
+//					cout<<"Adding in Frontier: "<<u->name<<" ";
 	
 					u->backedge = v->adj[i];
 					if(u->type == SINK){
