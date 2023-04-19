@@ -491,11 +491,16 @@ int main(int argc, char *argv[])
 	// print the contents of the Words file
 
 	//	wordi = id;
-	//	while (fin >> input) {
-	string input;
-//	while (fin >> input) { 
-//		cout<<"hi"<<endl;
-		cin>>input;
+	while (fin >> input) {
+		//make an arrat of string that holds the words from Words1.txt and individually give the while loop the string
+	}
+	string input, in1, in2;
+	in1 = "RAGE";
+	in2 = "ERR";
+
+	while (fin >> input) { 
+		//cout<<"hi"<<endl;
+//		cin>>input;
 		g.words_nodes.clear();
 		string charc;
 		g.wordi = g.min_nodes;
@@ -608,7 +613,7 @@ int main(int argc, char *argv[])
 		// Testing
         // Node node(DICE, "A");
         // std::cout << node << std::endl;
-//	}
+	}
 	fin.close();
     return 0;
 }
