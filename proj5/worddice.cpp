@@ -356,6 +356,9 @@ int Graph::canISpell()
 			//cout<<"Reverse edge of sink is 0: "<<sink->adj[i]->residual<<endl;
 			return 0;
         }
+		else {
+			continue;
+		}
     }
     return 1; //If a word node has residual capacity of 1, it can be spelled */
 
