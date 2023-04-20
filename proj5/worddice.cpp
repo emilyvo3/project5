@@ -187,27 +187,27 @@ int Graph::BFS()
             Nodes[i]->backedge = NULL;
 	}
 
-		//strat from source node and return true when we reach sink
-		frontier.push_back(Nodes[0]);
-		Node* v;
-		while(!frontier.empty()) {
-			v = frontier[0];
-			v->visited = 1;
+	//start from source node and return true when we reach sink
+	frontier.push_back(Nodes[0]);
+	Node* v;
+	while(!frontier.empty()) {
+		v = frontier[0];
+		v->visited = 1;
 
-			frontier.erase(frontier.begin());
+		frontier.erase(frontier.begin());
 
-	        // add the neighbors of v to the frontier
-		    for(int i = 0; i < v->adj.size(); i++) {
-				Node* u = v->adj[i]->to;
-				if(v->adj[i]->original == 1 && u->visited == 0){
-					frontier.push_back(u);
-					u->backedge = v->adj[i];
-					if(u->type == SINK){
-						return 1;
-					}
-				}	
-	        }	
-		}
+		// add the neighbors of v to the frontier
+		for(int i = 0; i < v->adj.size(); i++) {
+			Node* u = v->adj[i]->to;
+			if(v->adj[i]->original == 1 && u->visited == 0){
+				frontier.push_back(u);
+				u->backedge = v->adj[i];
+				if(u->type == SINK){
+					return 1;
+				}
+			}	
+	    }	
+	}
 	return 0;
 }
 
