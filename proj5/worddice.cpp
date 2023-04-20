@@ -39,16 +39,16 @@ class Graph
     public:
         Graph(string dice_file); // constructor
         ~Graph(); // destructor
-		Node* Get_Node(Node_Type t, string word, int i); // constructor
-		Edge* Get_Edge(Node *from, Node *to, bool reverse_edge); // constructor
-		Node* source;
+		Node* Get_Node(Node_Type t, string word, int i); // treating as a constructor for Node class 
+		Edge* Get_Edge(Node *from, Node *to, bool reverse_edge); // treating as a constructor for Edge class
+		Node* source; 
 		Node* sink;
-        int BFS();
+        int BFS();//looks for a possible path from source to sink
         int canISpell(); // determine whether a given word can be spelled using the dice faces by calling BFS()
         vector <int> spelling_ids; // optional- used to print; vector to store the IDs of the nodes used in the spelling of a word 
         void deleteHalfGraph(); // used in finding augumenting paths for max flow
         vector <Node*> Nodes;
-		bool letterExist(Node* from, Node* to);
+		bool letterExist(Node* from, Node* to);//helper function to make nodes between dice and word 
 		vector<Node*> dice_nodes;
 	    vector<Node*> words_nodes;
 		int id, wordi;
@@ -57,7 +57,7 @@ class Graph
 		void Print(string input);
 };
 
-// ddefine constructor for Node class that set its type, visited flag, and backedge
+// define constructor for Node class that set its type, visited flag, and backedge
 Node* Graph::Get_Node(Node_Type t, string word, int i)
 {
 	Node *n;
@@ -71,6 +71,7 @@ Node* Graph::Get_Node(Node_Type t, string word, int i)
 	return n;    
 }
 
+// prints out the words that can be 
 void Graph::Print(string input){
 	for(int i = 0; i < (int) spelling_ids.size() - 1; i++){
 		cout<<spelling_ids[i]<<",";
@@ -78,6 +79,7 @@ void Graph::Print(string input){
 	cout<<spelling_ids[(int) spelling_ids.size() - 1]<<": "<<input<<endl;
 }
 
+//a tester function we wrote to test our nodes and edges
 void Node::Print(){
 	printf("Node %i: %s Edges to ", id, name.c_str());
 	for(int i = 0; i < (int) adj.size(); i++){
@@ -102,6 +104,7 @@ Edge* Graph::Get_Edge(Node *from, Node *to, bool reverse_edge)
 	return e;
 }
 
+//the function checks if the word exists in the dice
 bool Graph::letterExist(Node* from, Node* to){
 	int ind = from->name[0];
 	if(to->letter[ind - 65]){
@@ -126,11 +129,12 @@ Graph::Graph(string dice_file)
 		exit(-1);
 	}
 
-    // print the contents of the Dice file
+    // create source node
     Node *source = Get_Node(SOURCE, "Source", id);
 	Nodes.push_back(source);
     id++;
 
+	//open the dice file and create nodes as we read in
 	string input;
     while (fin >> input) {
 		source = Get_Node(DICE, input, id);
@@ -157,7 +161,7 @@ Graph::Graph(string dice_file)
     }
 
 	fin.close();
-	min_nodes = id;
+	min_nodes = id;//set our minimum nodes to a count of source node + total no. of dice nodes
 }
 
 Graph::~Graph()
@@ -173,16 +177,18 @@ Graph::~Graph()
     }
 }
 
+//checks if a path from SOURCE-DICE-WORD-SINK exits
 int Graph::BFS()
 {
     vector<Node*> frontier;
+	//reset all visited and backedges to 0 an NULL respectively
 	for(int i = 0; i < (int)Nodes.size(); i++){
 			Nodes[i]->visited = 0;
             Nodes[i]->backedge = NULL;
 	}
 
+		//strat from source node and return true when we reach sink
 		frontier.push_back(Nodes[0]);
-//		cout<<"Adding in Frontier: "<<Nodes[0]->name<<endl;
 		Node* v;
 		while(!frontier.empty()) {
 			v = frontier[0];
@@ -205,6 +211,7 @@ int Graph::BFS()
 	return 0;
 }
 
+//checks if all the word nodes can be spelt using the dice nodes
 int Graph::canISpell()
 {
 	int count = 0;
@@ -216,6 +223,8 @@ int Graph::canISpell()
         on normal, and original = 1 and residual = 0 on the reverse
         - that way in BFS you only follow paths where original = 1 and doing this, 
         you will have choose a path you have already been on */
+
+
         Node *current = sink; // start from sink
         while (current->type != SOURCE) { // until the source has been reached
 			Edge *bedge = current->backedge; // get backedge
@@ -256,9 +265,10 @@ int Graph::canISpell()
 		}
 	}
 
-    return 1; //If a word node has residual capacity of 1, it can be spelled */
+    return 1; //If a word node has residual capacity of 1, it can be spelled 
 }
 
+//a helper function that looks for the Node id of the Dice node
 int Graph::findDice(int wordid){
 	for(int i = 0; i < (int)dice_nodes.size(); i++){
 		if(dice_nodes[i]->id == wordid){
@@ -268,10 +278,10 @@ int Graph::findDice(int wordid){
 	return 0;
 }
 
+//deletes the second half of the graph aka all the word nodes and the sink node
 void Graph::deleteHalfGraph()
 {
-    //delete the edges first that connect to the word nodes and sink
-	//delete the word nodes and sink node
+	//delete the forward edges from Dice nodes to Word nodes
 	for(int i = 0; i < min_nodes; i++){
 		if(Nodes[i]->type == DICE){
 			for(int j = (int)Nodes[i]->adj.size() - 1; j > 0; j--){
@@ -285,12 +295,14 @@ void Graph::deleteHalfGraph()
 	
 	for (int i = ((int)Nodes.size() - 1); i > (min_nodes - 1); i--)
     {
-        for (int j = (int)Nodes[i]->adj.size() - 1; j > 0; j--)
+		 //delete the edges first that connect to the word nodes and sink
+		for (int j = (int)Nodes[i]->adj.size() - 1; j > 0; j--)
         {
             delete Nodes[i]->adj[j];
 			Nodes[i]->adj.erase(Nodes[i]->adj.begin() + j);
 
         }
+		//delete the word nodes and sink node
         delete Nodes[i];
     	Nodes.erase(Nodes.begin() + i);
     }
@@ -311,6 +323,7 @@ int main(int argc, char *argv[])
 	dice_file = argv[1];
 	words_file = argv[2];
 
+	//start reading in from the word file
 	fin.open(words_file);
 
 	if (!fin.is_open())
@@ -319,14 +332,17 @@ int main(int argc, char *argv[])
 		//        return 1;
 		exit(-1);
 	}
-	//make an array of string that holds the words from Words1.txt and individually give the while loop the string
-	string input;// in1, in2;
+	
+	
+	string input;
 	while (fin >> input) { 
+		//first call the graph constructor so that the first half of the graph is set up
 		Graph g = Graph(dice_file);
 	
 		string charc;
 		g.wordi = g.min_nodes;
 
+		//create the word nodes
 		for (int i = 0; i < (int)input.length(); i++)
 		{
 			charc = input[i];
@@ -368,18 +384,21 @@ int main(int argc, char *argv[])
 			g.words_nodes[i]->adj.push_back(edge);
 			g.Nodes[(int)g.Nodes.size() - 1]->adj.push_back(redge);
 		}
-
+		
+		//assigning source and sink after fully creating the graph
 		g.source = g.Nodes[0];
 		g.sink = g.Nodes[(int)g.Nodes.size() - 1];
 
+		//check if you can spell the word or not
 		int can_spell = g.canISpell();
-        /* testing */
-		    if (can_spell == 1) { // residual capacity of 1
-				g.Print(input);
-		    }
-			else {
-				cout << "Cannot spell " << input << endl;
-			}
+		if (can_spell == 1) { 
+			g.Print(input);
+		}
+		else {
+			cout << "Cannot spell " << input << endl;
+		}
+
+		//delete half the graph once we're done checking for spelling
 		g.deleteHalfGraph();
 	}
 	fin.close();
