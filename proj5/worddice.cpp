@@ -167,9 +167,9 @@ Graph::Graph(string dice_file)
 Graph::~Graph()
 {
     /* deallocate nodes and edges */
-    for (int i = 0; i < Nodes.size(); i++)
+    for (int i = 0; i < (int)Nodes.size(); i++)
     {
-        for (int j = 0; j < Nodes[i]->adj.size(); j++)
+        for (int j = 0; j < (int)Nodes[i]->adj.size(); j++)
         {
             delete Nodes[i]->adj[j];
         }
@@ -197,7 +197,7 @@ int Graph::BFS()
 		frontier.erase(frontier.begin());
 
 		// add the neighbors of v to the frontier
-		for(int i = 0; i < v->adj.size(); i++) {
+		for(int i = 0; i < (int)v->adj.size(); i++) {
 			Node* u = v->adj[i]->to;
 			if(v->adj[i]->original == 1 && u->visited == 0){
 				frontier.push_back(u);
@@ -214,7 +214,6 @@ int Graph::BFS()
 //checks if all the word nodes can be spelt using the dice nodes
 int Graph::canISpell()
 {
-	int count = 0;
 	while(BFS()) { // while the paths are available
         /* 
         - once BFS() returns with a path found, follow the backedges 
